@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.BookDao">
+
+
+
+    <sql id="bookColumn">
+        book.book_id,
+        book.book_name,
+        book.book_author,
+        book.book_image,
+        book.book_press,
+        book.book_price,
+        book.book_description,
+        book.book_hot,
+        book_type.book_type_id,
+        book_type.book_type_name,
+        book_type.book_type_state
+    </sql>
+    <resultMap id="bookResultMap" type="Book">
+        <id column="book_id" property="bookId" jdbcType="INTEGER" />
+        <result column="book_name" property="bookName" jdbcType="VARCHAR" />
+        <result column="book_author" property="bookAuthor" jdbcType="VARCHAR" />
+        <result column="book_image" property="bookImage" jdbcType="VARCHAR" />
+        <result column="book_press" property="bookPress" jdbcType="VARCHAR" />
+        <result column="book_price" property="bookPrice" jdbcType="DECIMAL" />
+        <result column="book_description" property="bookDescription" jdbcType="VARCHAR" />
+        <result column="book_hot" property="bookHot" jdbcType="INTEGER" />
+        <association property="bookType" javaType="BookType">
+            <id column="book_type_id" property="bookTypeId"/>
+            <result column="book_type_name" property="bookTypeName"/>
+            <result column="book_type_state" property="bookTypeState"/>
+        </association>
+    </resultMap>
+    <select id="select" resultMap="bookResultMap" parameterType="integer">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+        where
+        book_id=#{bookId}
+    </select>
+
+    <select id="selectAll" resultMap="bookResultMap">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+    </select>
+
+    <update id="update">
+        update book
+        set
+            book_name=#{bookName},
+            book_author=#{bookAuthor},
+            book_image=#{bookImage},
+            book_press=#{bookPress},
+            book_price=#{bookPrice},
+            book_type_id=#{bookType.bookTypeId},
+            book_description=#{bookDescription}
+        where
+            book_id=#{bookId}
+    </update>
+
+    <insert id="insert">
+        insert into
+            book
+            (
+                book_id,
+                book_name,
+                book_author,
+                book_image,
+                book_press,
+                book_price,
+                book_type_id,
+                book_description,
+                book_hot
+            )
+        values (
+                null,
+                #{bookName},
+                #{bookAuthor},
+                #{bookImage},
+                #{bookPress},
+                #{bookPrice},
+                #{bookType.bookTypeId},
+                #{bookDescription},
+                1
+               )
+    </insert>
+
+    <delete id="delete">
+        delete from
+            book
+        where
+            book_id=#{bookId}
+    </delete>
+
+    <select id="selectByBookParam" parameterType="cn.zdn.obs.params.BookParam" resultType="Book">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        <where>
+            <if test="bookName!=null and bookName!=''">
+                and book_name like concat(concat('%',#{bookName}),'%')
+            </if>
+            <if test="minPrice!=null and maxPrice!=null">
+                and book_price between #{minPrice} and #{maxPrice}
+            </if>
+            <if test="bookAuthor!=null and bookAuthor!=-1">
+                and book_name like concat(concat('%',#{bookAuthor}),'%')
+            </if>
+            <if test="bookPress!=null and bookPress!=-1">
+                and book_press like concat(concat('%',#{bookPress}),'%')
+            </if>
+            <if test="productTypeId!=null and productTypeId!=-1">
+                and book_type_id=#{bookTypeId}
+            </if>
+           <!-- <if test="bookHot!=null and productTypeId!=-1">
+                and book_hot=#{bookHot}
+            </if>-->
+
+        </where>
+
+    </select>
+
+    <select id="selectByBookName" resultMap="bookResultMap">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+        where
+        book_name=#{bookName}
+    </select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="obs_backend:war">
+    <output-path>$PROJECT_DIR$/obs_parent/obs_backend/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>obs_backend</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="obs_backend.war">
+      <element id="artifact" artifact-name="obs_backend:war exploded" />
+    </root>
+  </artifact>
+</component>

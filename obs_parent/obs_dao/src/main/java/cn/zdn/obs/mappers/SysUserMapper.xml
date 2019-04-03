@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.SysUserDao">
+    <sql id="sysUserColumn">
+        sys_id,
+        sys_name,
+        sys_login_name,
+        sys_password,
+        sys_phone,
+        sys_email,
+        is_valid,
+        create_date
+    </sql>
+    <resultMap id="sysUserResultMap" type="SysUser">
+        <id column="sys_id" jdbcType="INTEGER" property="sysId" />
+        <result column="sys_name" jdbcType="VARCHAR" property="sysName" />
+        <result column="sys_login_name" jdbcType="VARCHAR" property="sysLoginName" />
+        <result column="sys_password" jdbcType="VARCHAR" property="sysPassword" />
+        <result column="sys_phone" jdbcType="VARCHAR" property="sysPhone" />
+        <result column="sys_email" jdbcType="VARCHAR" property="sysEmail" />
+        <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    </resultMap>
+    <select id="select" resultMap="sysUserResultMap">
+        select
+        <include refid="sysUserColumn"/>
+        from
+        sys_user
+        where
+        sys_id=#{sysId}
+    </select>
+
+    <select id="selectBySysLoginNameAndSysPassword" resultType="SysUser">
+        select
+        <include refid="sysUserColumn"/>
+        from
+        sys_user
+        where
+        sys_login_name=#{sysLoginName}
+        and
+        sys_password=#{sysPassword}
+        and
+        is_valid=#{isValid}
+    </select>
+
+    <select id="selectAll" resultMap="sysUserResultMap">
+        select
+        <include refid="sysUserColumn"/>
+        from
+        sys_user
+    </select>
+
+    <update id="update">
+        update
+        sys_user
+        set
+        sys_name=#{sysName},
+        sys_login_name=#{sysLoginName},
+        sys_phone=#{sysPhone},
+        sys_email=#{sysEmail},
+        is_valid=1-is_valid
+        where
+        sys_id=#{sys_Id}
+    </update>
+
+    <insert id="insert">
+        insert into
+        sys_user
+        values (
+        #{sysName},
+        #{sysLoginName},
+        #{sysPassword},
+        #{sysPhone},
+        #{sysEmail},
+        #{isValid}
+               )
+
+    </insert>
+
+    <update id="updateStatus">
+        update
+        sys_user
+        set
+        is_valid=1-is_valid
+        where
+        sys_id=1-sys_id
+    </update>
+
+
+    <delete id="delete">
+        delete from
+        sys_user
+        where
+        sys_id=#{sysId}
+    </delete>
+
+</mapper>

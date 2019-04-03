@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.CustomerDao">
+
+    <sql id="customerColumn">
+         customer_id,
+         customer_name,
+         customer_password,
+         customer_address,
+         customer_phone,
+         customer_register_date
+    </sql>
+    <resultMap id="customerResultMap" type="Customer">
+        <id column="customer_id" property="customerId" jdbcType="INTEGER" />
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+        <result column="customer_password" property="customerPassword" jdbcType="VARCHAR" />
+        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
+        <result column="customer_phone" property="customerPhone" jdbcType="VARCHAR" />
+        <result column="customer_register_date" property="customerRegisterDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="select" resultMap="customerResultMap">
+        select
+        <include refid="customerColumn"/>
+        from
+        customer
+        where
+        customer_id=#{customerId}
+    </select>
+
+    <select id="selectAll" resultMap="customerResultMap">
+        select
+        <include refid="customerColumn"/>
+        from
+        customer
+    </select>
+
+    <update id="update" parameterType="Customer">
+        update
+        customer
+        set
+        customer_name=#{customerName},
+        customer_address=#{customerAddress},
+        customer_phone=#{customerPhone}
+        where
+        customer_id=#{customerId}
+    </update>
+
+    <insert id="insert" parameterType="Customer">
+        insert into
+        customer
+        values (
+                #{customerName},
+                #{customerPassword},
+                #{customerAddress},
+                #{customerPassword}
+               )
+    </insert>
+
+    <delete id="delete">
+        delete from
+        customer
+        where
+        customer_id=#{customerId}
+    </delete>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.CommentDao">
+
+    <sql id="commentColumn">
+         comment_id,
+         book_id,
+         customer_id,
+         comment_content
+    </sql>
+    <resultMap id="CommentResultMap" type="Comment">
+        <id column="comment_id" property="commentId" jdbcType="VARCHAR"/>
+        <result column="book_id" property="bookId" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="comment_content" property="commentContent" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="select" resultMap="CommentResultMap" parameterType="integer">
+        select
+        <include refid="commentColumn"/>
+        from
+        comment
+        where
+        comment_id=#{commentId}
+    </select>
+
+    <select id="selectAll" resultMap="CommentResultMap">
+        select
+        <include refid="commentColumn"/>
+        from
+        comment
+    </select>
+
+    <update id="update">
+        update
+            comment
+        set comment_content=#{commentContent}
+        where comment_id = #{commentId}
+    </update>
+
+    <insert id="insert" parameterType="Comment">
+        insert into comment
+        values (#{bookId},
+                #{commentContent},
+                #{customerId})
+
+    </insert>
+
+    <delete id="delete">
+        delete
+        from comment
+        where comment_id = #{commentId}
+    </delete>
+</mapper>

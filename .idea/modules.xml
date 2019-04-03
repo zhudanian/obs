@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_backend/obs_backend.iml" filepath="$PROJECT_DIR$/obs_parent/obs_backend/obs_backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_common/obs_common.iml" filepath="$PROJECT_DIR$/obs_parent/obs_common/obs_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_dao/obs_dao.iml" filepath="$PROJECT_DIR$/obs_parent/obs_dao/obs_dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_front/obs_front.iml" filepath="$PROJECT_DIR$/obs_parent/obs_front/obs_front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_parent.iml" filepath="$PROJECT_DIR$/obs_parent/obs_parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_pojo/obs_pojo.iml" filepath="$PROJECT_DIR$/obs_parent/obs_pojo/obs_pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obs_parent/obs_service/obs_service.iml" filepath="$PROJECT_DIR$/obs_parent/obs_service/obs_service.iml" />
+    </modules>
+  </component>
+</project>

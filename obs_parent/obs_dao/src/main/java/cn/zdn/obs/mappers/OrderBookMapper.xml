@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.OrderBookDao">
+
+    <sql id="orderBookColumn">
+         id,
+         order_id,
+         book_id,
+         num,
+         price
+    </sql>
+    <resultMap id="orderBookResultMap" type="OrderBook">
+        <id column="id" property="id" jdbcType="INTEGER" />
+
+        <result column="num" property="num" jdbcType="INTEGER" />
+        <result column="price" property="price" jdbcType="DECIMAL" />
+        <association property="bookId" javaType="Book">
+            <id column="book_id" property="bookId"/>
+            <result column="book_name" property="bookName"/>
+            <result column="book_image" property="bookImage"/>
+        </association>
+        <association property="orderId" javaType="Order">
+            <id column="order_id" property="orderId"/>
+            <result column="confirm_date" property="confirmDate"/>
+            <result column="customer_id" property="customerId"/>
+        </association>
+    </resultMap>
+    <select id="select" resultType="OrderBook">
+        select
+        <include refid="orderBookColumn"/>
+        from
+        order_book
+        where
+        id=#{id}
+    </select>
+
+    <select id="selectAll" resultType="OrderBook">
+        select
+        <include refid="orderBookColumn"/>
+        from
+        order_book
+    </select>
+
+    <update id="update">
+        update
+        order_book
+        set
+        num=#{num}
+        where
+        id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from
+        order_book
+        where
+        id=#{id}
+    </delete>
+
+    <insert id="insert">
+        insert into
+        order_book
+        values(
+              num=#{num},
+              price=${price}
+              )
+    </insert>
+
+</mapper>

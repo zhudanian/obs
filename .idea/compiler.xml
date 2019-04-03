@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="obs_backend" />
+        <module name="obs_common" />
+        <module name="obs_dao" />
+        <module name="obs_front" />
+        <module name="obs_pojo" />
+        <module name="obs_service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="8">
+      <module name="obs_backend" target="1.7" />
+      <module name="obs_common" target="1.7" />
+      <module name="obs_dao" target="1.7" />
+      <module name="obs_front" target="1.7" />
+      <module name="obs_parent" target="1.7" />
+      <module name="obs_pojo" target="1.7" />
+      <module name="obs_service" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

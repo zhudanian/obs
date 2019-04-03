@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.BookTypeDao">
+
+    <sql id="bookTypeColumn">
+        book_type_id,
+        book_type_name,
+        book_type_state
+    </sql>
+
+    <resultMap id="BookTypeMap" type="BookType" >
+        <id column="book_type_id" property="bookTypeId" jdbcType="INTEGER" />
+        <result column="book_type_name" property="bookTypeName" jdbcType="VARCHAR" />
+        <result column="book_type_state" property="bookTypeState" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="select" resultMap="BookTypeMap" parameterType="integer">
+        select
+        <include refid="bookTypeColumn"/>
+        from
+        book_type
+        where
+        book_type_id=#{bookTypeId}
+    </select>
+
+    <select id="selectAll" resultMap="BookTypeMap">
+        select
+        <include refid="bookTypeColumn"/>
+        from
+        book_type
+    </select>
+
+    <update id="update" parameterType="BookType">
+        update
+        book_type
+        set
+        book_type_name=#{bookTypeName}
+        where
+        book_type_id=#{bookTypeId}
+    </update>
+
+    <insert id="insert" parameterType="BookType">
+        insert into
+        book_type
+        values (
+        null,
+        #{bookTypeName},
+        1
+        )
+    </insert>
+
+    <delete id="delete">
+        delete from
+        book_type
+        where
+        book_type_id=#{bookTypeId}
+    </delete>
+
+    <update id="updateStatus">
+        update
+        book_type
+        set
+        book_type_state=1-book_type_state
+        where
+        book_type_id=#{bookTypeId}
+    </update>
+
+    <select id="selectByBookTypeState" resultMap="BookTypeMap">
+        select
+        <include refid="bookTypeColumn"/>
+        from
+        book_type
+        where
+        book_type_state=#{bookTypeState}
+    </select>
+
+</mapper>
