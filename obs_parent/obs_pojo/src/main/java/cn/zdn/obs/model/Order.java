@@ -13,11 +13,10 @@ public class Order implements Serializable {
     private Date confirmDate;
     private Integer orderState;
     private BigDecimal totalPrice;
-    private Integer customerId;
     private String contactName;
     private String contactPhone;
     private String contactAddress;
-    private Integer commentId;
-
+    private Customer customer;
+    private Comment comment;
 
 }

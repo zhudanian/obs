@@ -10,7 +10,7 @@
         <property name="locations">
             <list>
                 <value>classpath:db.properties</value>
-                <!--<value>classpath:ftp.properties</value>-->
+                <value>classpath:ftp.properties</value>
             </list>
         </property>
     </bean>

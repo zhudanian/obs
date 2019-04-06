@@ -2,6 +2,7 @@ package cn.zdn.obs.dao;
 
 
 import cn.zdn.obs.model.Customer;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface CustomerDao {
     Integer update(Customer customer);
 
     Integer delete(Integer customerId);
+
+    Customer selectCustomerByNameAndPassword(@Param("customerName") String customerName, @Param("customerPassword")String customerPassword);
 }

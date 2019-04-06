@@ -19,7 +19,7 @@
     <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
     <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
-    <script>
+ <%--   <script>
         function showOrderDetailModel() {
             alert(customerId);
             $.post(
@@ -37,7 +37,7 @@
             $('#showCustomerModal').modal('show');
         }
 
-    </script>
+    </script>--%>
 </head>
 
 <body>
@@ -97,12 +97,11 @@
     </div>
 </div>
 
-<!--查看客户详情 start -->
+<%--<!--查看客户详情 start -->
 <div class="modal fade" tabindex="-1" id="showCustomerModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <input type="hidden" name="pageNum" value="${sysUser.pageNum}">
 
         <form enctype="multipart/form-data" class="form-horizontal" id="showCustomerForm">
             <div class="modal-content">
@@ -154,7 +153,7 @@
         </form>
     </div>
     <!-- 客户信息 end -->
-</div>
+</div>--%>
 </body>
 
 </html>

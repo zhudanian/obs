@@ -36,6 +36,17 @@
         customer
     </select>
 
+    <select id="selectCustomerByNameAndPassword" resultMap="customerResultMap">
+        select
+        <include refid="customerColumn"/>
+        from
+        customer
+        where
+        customer_name=#{customerName}
+        and
+        customer_password=#{customerPassword}
+    </select>
+
     <update id="update" parameterType="Customer">
         update
         customer

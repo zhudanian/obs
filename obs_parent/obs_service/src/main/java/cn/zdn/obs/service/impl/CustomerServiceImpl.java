@@ -7,12 +7,13 @@ import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerDao customerDao;
@@ -31,6 +32,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Integer add(Customer customer) {
         return customerDao.insert(customer);
+    }
+
+    @Override
+    public Customer queryCustomerByNameAndPassword(String customerName, String customerPassword) {
+        return customerDao.selectCustomerByNameAndPassword(customerName,customerPassword);
+    }
+
+    @Override
+    public void checkNameExist(String customerName) {
+
     }
 
     @Override

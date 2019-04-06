@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class Book implements Serializable {
@@ -16,5 +17,6 @@ public class Book implements Serializable {
     private String bookDescription;
     private Integer bookHot;
     private BookType BookType;
+    private Date onSaleTime;
  //   private Comment comment;
 }

@@ -15,4 +15,6 @@ public interface OrderService {
     Integer remove(Integer orderId);
 
     Integer add(Order order);
+
+    List<Order> queryByCustomerId(Integer customerId);
 }

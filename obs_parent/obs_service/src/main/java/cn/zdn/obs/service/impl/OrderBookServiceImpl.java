@@ -5,12 +5,13 @@ import cn.zdn.obs.model.OrderBook;
 import cn.zdn.obs.service.OrderBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 public class OrderBookServiceImpl implements OrderBookService {
     @Autowired
     private OrderBookDao orderBookDao;

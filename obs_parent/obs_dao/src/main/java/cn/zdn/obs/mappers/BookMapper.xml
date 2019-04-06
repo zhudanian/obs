@@ -15,6 +15,7 @@
         book.book_price,
         book.book_description,
         book.book_hot,
+        book.on_sale_time,
         book_type.book_type_id,
         book_type.book_type_name,
         book_type.book_type_state
@@ -28,6 +29,7 @@
         <result column="book_price" property="bookPrice" jdbcType="DECIMAL" />
         <result column="book_description" property="bookDescription" jdbcType="VARCHAR" />
         <result column="book_hot" property="bookHot" jdbcType="INTEGER" />
+        <result column="on_sale_time" property="onSaleTime" jdbcType="DATE" />
         <association property="bookType" javaType="BookType">
             <id column="book_type_id" property="bookTypeId"/>
             <result column="book_type_name" property="bookTypeName"/>
@@ -142,4 +144,39 @@
         book_name=#{bookName}
     </select>
 
+    <select id="selectByHot" resultMap="bookResultMap">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+        where
+        book_hot=1
+        limit 4
+    </select>
+
+    <select id="selectNewBook" resultMap="bookResultMap">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+        order by on_sale_time desc
+        limit 5
+    </select>
+
+    <select id="selectByInput" resultMap="bookResultMap">
+        select
+        <include refid="bookColumn"/>
+        from
+        book
+        left join book_type
+        on book.book_type_id = book_type.book_type_id
+        where
+        book_name like concat(concat('%',#{inputString}),'%')
+        or
+        book_type.book_type_name like concat(concat('%',#{inputString}),'%')
+    </select>
 </mapper>

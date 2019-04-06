@@ -55,28 +55,4 @@ public class CustomerController {
 
     }
 
-    //删除书籍
-    @RequestMapping("/removeByBookId")
-    @ResponseBody
-    public ResponseResult removeByCustomerId(Integer customerId) {
-        Integer res = customerService.remove(customerId);
-        if (res > 0) {
-            return ResponseResult.success("删除成功！");
-        } else {
-            return ResponseResult.fail("删除失败!");
-        }
-    }
-
-    //添加书籍
-    @RequestMapping("/add")
-    @ResponseBody
-    public ResponseResult add(Customer customer) {
-        Integer res = customerService.add(customer);
-        if (res > 0) {
-            return ResponseResult.success("添加成功！");
-        } else {
-            return ResponseResult.fail("添加失败!");
-        }
-    }
-
 }

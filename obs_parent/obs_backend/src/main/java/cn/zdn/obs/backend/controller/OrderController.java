@@ -1,6 +1,8 @@
 package cn.zdn.obs.backend.controller;
 
+import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
+import cn.zdn.obs.model.Cart;
 import cn.zdn.obs.model.Order;
 import cn.zdn.obs.service.OrderService;
 import com.github.pagehelper.PageHelper;
@@ -8,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,7 +24,10 @@ public class OrderController {
 
     @RequestMapping("/queryAll")
     public String queryAll(Integer pageNum, Model model) {
-        PageHelper.startPage(pageNum);
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum,Constant.PAGE_SIZE);
         List<Order> orders = orderService.queryAll();
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         model.addAttribute("order", pageInfo);
@@ -62,10 +68,10 @@ public class OrderController {
         }
     }
 
-    //添加书籍
-    @RequestMapping("/add")
+    //提交订单
+    @RequestMapping("/confirmOrder")
     @ResponseBody
-    public ResponseResult add(Order order) {
+    public ResponseResult confirmOrder(Order order) {
         Integer res = orderService.add(order);
         if (res > 0) {
             return ResponseResult.success("添加成功！");

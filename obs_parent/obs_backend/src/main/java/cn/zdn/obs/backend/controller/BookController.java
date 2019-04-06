@@ -3,11 +3,15 @@ package cn.zdn.obs.backend.controller;
 import cn.zdn.obs.backend.vo.BookVO;
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
+import cn.zdn.obs.exceptions.FileUploadException;
+import cn.zdn.obs.ftp.FtpConfig;
+import cn.zdn.obs.ftp.FtpUtils;
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.model.BookType;
 import cn.zdn.obs.params.BookParam;
 import cn.zdn.obs.service.BookService;
 import cn.zdn.obs.service.BookTypeService;
+import cn.zdn.obs.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -19,7 +23,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +38,9 @@ public class BookController {
 
     @Autowired
     private BookTypeService bookTypeService;
+
+    @Autowired
+    private FtpConfig ftpConfig;
 
     @RequestMapping("/checkBookName")
     @ResponseBody
@@ -65,7 +74,10 @@ public class BookController {
     //按条件查询书籍
     @RequestMapping("/queryByBookParam")
     public String queryByBookParam(BookParam bookParam, Integer pageNum, Model model) {
-        PageHelper.startPage(pageNum);
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum, Constant.PAGE_SIZE);
         List<Book> books = bookService.queryByBookParam(bookParam);
         PageInfo<Book> pageInfo = new PageInfo<>(books);
         model.addAttribute("book", pageInfo);
@@ -75,7 +87,7 @@ public class BookController {
     //在修改模态框和添加模态框的下拉列表中显示启用状态下的商品类型名称
     @ModelAttribute("bookTypes")
     //执行该controller下所有请求,先执行该方法，值存入key为productTypes中,默认作用相当于request
-    public List<BookType> loadProductTypes() {
+    public List<BookType> queryEnable() {
         return bookTypeService.queryEnable(Constant.BOOK_TYPE_ENABLE);
 
     }
@@ -95,7 +107,7 @@ public class BookController {
         System.out.println(bookVO);
         try {
             Book book = new Book();
-            PropertyUtils.copyProperties(book,bookVO);
+            PropertyUtils.copyProperties(book, bookVO);
             System.out.println(book);
             BookType bookType = new BookType();
             bookType.setBookTypeId(bookVO.getBookTypeId());
@@ -127,11 +139,32 @@ public class BookController {
     public ResponseResult add(BookVO bookVO) {
         try {
             Book book = new Book();
-            PropertyUtils.copyProperties(book,bookVO);
+            PropertyUtils.copyProperties(book, bookVO);
             BookType bookType = new BookType();
             bookType.setBookTypeId(bookVO.getBookTypeId());
             book.setBookType(bookType);
+            //获取原始文件名
+            //bookVO.getFile().getOriginalFilename();
+            //bookVO.getFile().getInputStream();
+            //获取文件名
+            //处理该文件名，通过一种方式获取一个尽可能不冲突的文件名
+            String fileName = StringUtils.renameFileName(bookVO.getFile().getOriginalFilename());
+            //String filePath = productDto.getUploadPath() + "\\" + fileName;
+            //获取ftp服务器上的二级目录
+            String picSavePath = StringUtils.generateRandomDir(fileName);
+            String filePath = "";
+            //上传文件
+            try {
+                filePath = FtpUtils.pictureUploadByConfig(ftpConfig, fileName, picSavePath,
+                        bookVO.getFile().getInputStream());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseResult.fail("封面上传失败!" );
+            }
+            book.setOnSaleTime(new Date());
+            book.setBookImage(filePath);
             bookService.add(book);
+            System.out.println(book);
             return ResponseResult.success("添加成功！");
         } catch (Exception e) {
             e.printStackTrace();

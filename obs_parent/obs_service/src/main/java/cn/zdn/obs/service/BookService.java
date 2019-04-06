@@ -1,5 +1,6 @@
 package cn.zdn.obs.service;
 
+import cn.zdn.obs.cart.ShoppingCart;
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.params.BookParam;
 
@@ -20,4 +21,12 @@ public interface BookService {
     Integer modify(Book book);
 
     Book checkBookName(String bookName);
+
+    List<Book> queryByHot();
+
+    List<Book> queryNewBook();
+
+    boolean addToCart(Integer bookId, ShoppingCart bookItem);
+
+    List<Book> queryByInput(String inputString);
 }

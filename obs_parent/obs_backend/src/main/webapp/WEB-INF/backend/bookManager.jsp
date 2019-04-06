@@ -22,11 +22,11 @@
     <script>
         $(function () {
             //上传图像预览
-            $('#book-image').on('change', function () {
-                $('#img').attr('src', window.URL.createObjectURL(this.files[0]));
+            $('#bookImage_add').on('change', function () {
+                $('#bookImage_add_preview').attr('src', window.URL.createObjectURL(this.files[0]));
             });
-            $('#book-image').on('change', function () {
-                $('#img2').attr('src', window.URL.createObjectURL(this.files[0]));
+            $('#bookImage_update').on('change', function () {
+                $('#bookImage_modify_preview').attr('src', window.URL.createObjectURL(this.files[0]));
             });
 
             //服务器端接收消息
@@ -393,10 +393,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="bookImage" class="col-sm-4 control-label">封面：</label>
+                            <label for="bookImage_add" class="col-sm-4 control-label">封面：</label>
                             <div class="col-sm-8">
                                 <a href="javascript:" class="file">选择文件
-                                    <input type="file" name="bookImage" id="bookImage">
+                                    <input type="file" name="bookImage" id="bookImage_add">
                                 </a>
                             </div>
                         </div>
@@ -487,7 +487,7 @@
                                 <label class="col-sm-4 control-label">封面：</label>
                                 <div class="col-sm-8">
                                     <a href="javascript:" class="file">选择文件
-                                        <input type="file" id="bookImage_m" name="bookImage">
+                                        <input type="file" id="bookImage_update" name="bookImage">
                                     </a>
                                 </div>
                             </div>

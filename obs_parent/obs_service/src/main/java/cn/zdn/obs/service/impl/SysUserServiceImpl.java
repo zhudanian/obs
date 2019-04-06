@@ -2,7 +2,6 @@ package cn.zdn.obs.service.impl;
 
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.dao.SysUserDao;
-import cn.zdn.obs.exceptions.SysUserNotExistException;
 import cn.zdn.obs.model.SysUser;
 import cn.zdn.obs.params.SysUserParam;
 import cn.zdn.obs.service.SysUserService;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class SysUserServiceImpl implements SysUserService {
 
     @Autowired

@@ -11,7 +11,7 @@ public interface BookDao {
 
     List<Book> selectByBookParam(@Param("bookParam") BookParam bookParam);
 
-    Object select(Integer bookId);
+    Book select(Integer bookId);
 
     List<Book> selectAll();
 
@@ -22,4 +22,10 @@ public interface BookDao {
     Integer insert(Book book);
 
     Book selectByBookName(String bookName);
+
+    List<Book> selectByHot();
+
+    List<Book> selectNewBook();
+
+    List<Book> selectByInput(String inputString);
 }

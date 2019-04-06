@@ -15,4 +15,8 @@ public interface CustomerService {
     Integer remove(Integer bookId);
 
     Integer add(Customer customer);
+
+    Customer queryCustomerByNameAndPassword(String customerName, String customerPassword);
+
+    void checkNameExist(String customerName);
 }

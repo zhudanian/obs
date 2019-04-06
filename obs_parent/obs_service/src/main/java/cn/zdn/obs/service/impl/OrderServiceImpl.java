@@ -6,12 +6,13 @@ import cn.zdn.obs.service.OrderService;
 import cn.zdn.obs.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDao orderDao;
@@ -28,7 +29,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Integer add(Order order) {
+
         return orderDao.insert(order);
+    }
+
+    @Override
+    public List<Order> queryByCustomerId(Integer customerId) {
+        return null;
     }
 
     @Override
