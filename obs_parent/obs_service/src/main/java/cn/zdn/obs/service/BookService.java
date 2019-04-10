@@ -1,9 +1,12 @@
 package cn.zdn.obs.service;
 
 import cn.zdn.obs.cart.ShoppingCart;
+import cn.zdn.obs.dto.BookDto;
+import cn.zdn.obs.exceptions.FileUploadException;
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.params.BookParam;
 
+import java.io.OutputStream;
 import java.util.List;
 
 public interface BookService {
@@ -16,7 +19,7 @@ public interface BookService {
 
     List<Book> queryByBookParam(BookParam bookParam);
 
-    Integer add(Book book);
+    void add(BookDto bookDto)throws FileUploadException;
 
     Integer modify(Book book);
 
@@ -29,4 +32,6 @@ public interface BookService {
     boolean addToCart(Integer bookId, ShoppingCart bookItem);
 
     List<Book> queryByInput(String inputString);
+
+    void getBookImage(String path, OutputStream out);
 }

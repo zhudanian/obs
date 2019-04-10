@@ -3,20 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.zdn.obs.dao.OrderDao">
-
     <sql id="orderColumn">
-       order_id,
-       confirm_date,
-       order_state,
-       total_price,
-       contact_name,
-       contact_phone,
-       contact_address,
-       customer_id,
-       comment_id
+            order.order_id,
+            order.confirm_date,
+            order.order_state,
+            order.total_price,
+            order.contact_name,
+            order.contact_phone,
+            order.contact_address,
+            customer.customerName
+    </sql>
+    <sql id="orderColumn1">
+        order_id,
+        confirm_date,
+        order_state,
+        total_price,
+        contact_name,
+        contact_phone,
+        contact_address,
     </sql>
 
-    <resultMap id="orderResultMap" type="Order">
+    <resultMap id="orderResultMap1" type="Order">
         <id column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP" />
         <result column="order_state" property="orderState" jdbcType="INTEGER" />
@@ -24,16 +31,24 @@
         <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
         <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
         <result column="contact_address" property="contactAddress" jdbcType="VARCHAR" />
-
         <association property="comment" javaType="Comment">
             <id column="comment_id" property="commentId" jdbcType="INTEGER" />
         </association>
-
         <association property="customer" javaType="Customer">
             <id column="customer_id" property="customerId" jdbcType="INTEGER" />
+            <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
         </association>
     </resultMap>
 
+    <resultMap id="orderResultMap2" type="Order">
+        <id column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP" />
+        <result column="order_state" property="orderState" jdbcType="INTEGER" />
+        <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+        <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+        <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+        <result column="contact_address" property="contactAddress" jdbcType="VARCHAR" />
+    </resultMap>
 
     <select id="select" resultType="Order">
         select
@@ -44,9 +59,9 @@
         order_id=#{orderId}
     </select>
 
-    <select id="selectAll" resultType="Order">
+    <select id="selectAll" resultMap="orderResultMap2">
         select
-        <include refid="orderColumn"/>
+        <include refid="orderColumn1"/>
         from
         order
     </select>

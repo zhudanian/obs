@@ -396,7 +396,7 @@
                             <label for="bookImage_add" class="col-sm-4 control-label">封面：</label>
                             <div class="col-sm-8">
                                 <a href="javascript:" class="file">选择文件
-                                    <input type="file" name="bookImage" id="bookImage_add">
+                                    <input type="file" name="file" id="bookImage_add">
                                 </a>
                             </div>
                         </div>
@@ -487,7 +487,7 @@
                                 <label class="col-sm-4 control-label">封面：</label>
                                 <div class="col-sm-8">
                                     <a href="javascript:" class="file">选择文件
-                                        <input type="file" id="bookImage_update" name="bookImage">
+                                        <input type="file" id="bookImage_update" name="file">
                                     </a>
                                 </div>
                             </div>

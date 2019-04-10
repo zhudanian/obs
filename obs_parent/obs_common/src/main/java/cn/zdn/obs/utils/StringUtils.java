@@ -16,9 +16,6 @@ public class StringUtils {
         String suffix = fileName.substring(dotIndex);
         return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+
                 new Random().nextInt(100)+suffix;
-
-
-
     }
 
     //通过hashcode获取二级目录

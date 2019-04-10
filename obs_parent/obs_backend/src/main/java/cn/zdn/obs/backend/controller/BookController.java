@@ -3,6 +3,7 @@ package cn.zdn.obs.backend.controller;
 import cn.zdn.obs.backend.vo.BookVO;
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
+import cn.zdn.obs.dto.BookDto;
 import cn.zdn.obs.exceptions.FileUploadException;
 import cn.zdn.obs.ftp.FtpConfig;
 import cn.zdn.obs.ftp.FtpUtils;
@@ -23,8 +24,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +45,6 @@ public class BookController {
 
     @Autowired
     private BookTypeService bookTypeService;
-
-    @Autowired
-    private FtpConfig ftpConfig;
 
     @RequestMapping("/checkBookName")
     @ResponseBody
@@ -86,7 +90,7 @@ public class BookController {
 
     //在修改模态框和添加模态框的下拉列表中显示启用状态下的商品类型名称
     @ModelAttribute("bookTypes")
-    //执行该controller下所有请求,先执行该方法，值存入key为productTypes中,默认作用相当于request
+    //执行该controller下所有请求,先执行该方法，值存入key为bookTypes中,默认作用相当于request
     public List<BookType> queryEnable() {
         return bookTypeService.queryEnable(Constant.BOOK_TYPE_ENABLE);
 
@@ -133,42 +137,76 @@ public class BookController {
         }
     }
 
+    //获取图片
+    /*
+    逻辑：根据图片的路径，转成字节流，----》拷贝到输出流
+     */
+    @RequestMapping("/getImg")
+    public void getImg(String path,OutputStream out){
+
+        bookService.getBookImage(path,out);
+
+    }
+
     //添加书籍
     @RequestMapping("/add")
     @ResponseBody
-    public ResponseResult add(BookVO bookVO) {
+    public String add(BookVO bookVO, Integer pageNum, Model model) {
+        //System.out.println(111);
+        //return "bookManager";
+
+        //获取图片存放的物理路径
+        //String uploadPath = session.getServletContext().getRealPath("/WEB-INF/upload");
+        //将VO转换成DTO
+        BookDto bookDto = new BookDto();
+        System.out.println(bookVO);
+        //bookDto.setName(bookVO.getName());
+        //bookDto.setPrice(bookVO.getPrice());
         try {
-            Book book = new Book();
-            PropertyUtils.copyProperties(book, bookVO);
-            BookType bookType = new BookType();
-            bookType.setBookTypeId(bookVO.getBookTypeId());
-            book.setBookType(bookType);
+            //将vo中属性值对应的拷贝到dto的相关属性中(属性必须一一对应),获取部分值
+            PropertyUtils.copyProperties(bookDto, bookVO);
             //获取原始文件名
-            //bookVO.getFile().getOriginalFilename();
-            //bookVO.getFile().getInputStream();
-            //获取文件名
-            //处理该文件名，通过一种方式获取一个尽可能不冲突的文件名
-            String fileName = StringUtils.renameFileName(bookVO.getFile().getOriginalFilename());
-            //String filePath = productDto.getUploadPath() + "\\" + fileName;
-            //获取ftp服务器上的二级目录
-            String picSavePath = StringUtils.generateRandomDir(fileName);
-            String filePath = "";
-            //上传文件
-            try {
-                filePath = FtpUtils.pictureUploadByConfig(ftpConfig, fileName, picSavePath,
-                        bookVO.getFile().getInputStream());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ResponseResult.fail("封面上传失败!" );
-            }
-            book.setOnSaleTime(new Date());
-            book.setBookImage(filePath);
-            bookService.add(book);
-            System.out.println(book);
-            return ResponseResult.success("添加成功！");
+            bookDto.setFileName(bookVO.getFile().getOriginalFilename());
+            bookDto.setInputStream(bookVO.getFile().getInputStream());
+            //bookDto.setUploadPath(uploadPath);
+            bookService.add(bookDto);
+            model.addAttribute("successMsg", "添加成功");
+
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseResult.fail("添加失败!");
+            model.addAttribute("errorMsg", e.getMessage());
         }
+
+        //返回列表页面
+        return "forward:queryAll?pageNum=" + pageNum;//转发到findAll请求
     }
+
+    @RequestMapping("/showPic")
+    public void showPic(String image, OutputStream out) throws IOException {
+
+        //将http请求读取为流
+        URL url = new URL(image);
+        URLConnection urlConnection = url.openConnection();
+        InputStream is = urlConnection.getInputStream();
+
+        BufferedOutputStream bos = new BufferedOutputStream(out);
+
+        //创建缓冲字节流
+        //将输入流写入输出流
+        byte[] data = new byte[4096];
+        int size=0;
+        size = is.read(data);
+        while (size!=-1){
+            bos.write(data,0,size);
+            size=is.read(data);
+        }
+
+        //关闭这些流
+        is.close();
+        bos.flush();
+        bos.close();
+    }
+
+
+
 }
+
