@@ -39,6 +39,7 @@ public class CustomerController {
     @ResponseBody
     public ResponseResult queryByCustomerId(Integer customerId) {
         Customer customer = customerService.queryByCustomerId(customerId);
+        System.out.println(customer);
         return ResponseResult.success(customer);
     }
 

@@ -96,8 +96,7 @@
                         <td>${customer.customerName}</td>
                         <td>${customer.customerPhone}</td>
                         <td>${customer.customerAddress}</td>
-                        <td><fmt:formatDate value="${customer.customerRegisterDate}" pattern="yyyy年MM月dd日"/></td>
-                   <%--     <td>${customer.customerRegisterDate}</td>--%>
+                        <td>${customer.customerRegisterDate}</td>
                       <%--  <td><fmt:formatDate value="${customer.customerRegisterDate}" pattern="yyyy年MM月dd日"/></td>--%>
                         <td class="text-center">
                             <button type="button" class="btn btn-primary btn-sm"

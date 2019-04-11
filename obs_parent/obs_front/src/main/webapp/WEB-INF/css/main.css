@@ -1,0 +1,78 @@
+.row {
+    align-content: center;
+}
+
+.logo {
+    margin-top: -10px;
+    height: 120px;
+    width: 150px;
+}
+
+.cart {
+    height: 90px;
+    width: 90px;
+}
+
+.header-navbar {
+    margin-top: -10px;
+    background-color: #daba03;
+}
+
+.bookstore-top {
+    margin-top: 20px;
+}
+
+.item {
+    height: 450px;
+    width: 800px;
+}
+.item > div{
+    float: left;
+    margin-left: -500px;
+}
+.item > div h3 {
+    margin-left: 10px;
+    color: #0da61c;
+}
+.item > div h2 {
+    margin-left: 20px;
+    color: #da3b10;
+}
+.item > div h1 {
+    margin-left: 30px;
+    color: #145bda;
+}
+
+.activities > div {
+    margin: 10px 45px 15px 0;
+    width: 350px;
+    height: 135px;
+    border-radius: 20px;
+    border: #daba03 solid 3px;
+}
+.bookstore-center {
+    margin-top: 40px;
+    height: 600px;
+}
+
+.category-area {
+    border: #daba03 solid 3px;
+    border-radius: 30px;
+    height: 600px;
+}
+.menu ul{
+    float: left;
+    padding-left: 60px;
+}
+
+.menu li {
+    width: 200px;
+    padding-top: 9px;
+    height: 50px;
+    text-align: left;
+    font-size: 18pt;
+}
+.card{
+    width: 50px;
+    height: 100px;
+}
