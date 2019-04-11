@@ -176,8 +176,8 @@
             });
         });
 
-        //添加商品类型
-        function addBook() {
+        //添加商品
+       /* function addBook() {
             $.ajax({
                 type: 'post',
                 url: '${pageContext.request.contextPath}/backend/bookManager/add',
@@ -206,7 +206,7 @@
                 }
             })
         }
-
+*/
         //显示修改产品模态框
         function showChangeBookModel(bookId) {
             alert(bookId);
@@ -351,7 +351,7 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form id="addBookForm" enctype="multipart/form-data" class="form-horizontal">
+        <form id="addBookForm" enctype="multipart/form-data" class="form-horizontal"  action="${pageContext.request.contextPath}/backend/bookManager/add" method="post">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
@@ -419,8 +419,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" data-dismiss="modal" onclick="addBook()">添加</button>
-                    <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
+                    <input class="btn btn-primary" type="submit" value="添加"/>
+                    <input class="btn btn-primary cancel" data-dismiss="modal" type="button" value="取消"/>
                 </div>
             </div>
         </form>

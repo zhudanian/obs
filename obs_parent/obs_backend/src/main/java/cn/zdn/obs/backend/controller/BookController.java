@@ -4,15 +4,11 @@ import cn.zdn.obs.backend.vo.BookVO;
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
 import cn.zdn.obs.dto.BookDto;
-import cn.zdn.obs.exceptions.FileUploadException;
-import cn.zdn.obs.ftp.FtpConfig;
-import cn.zdn.obs.ftp.FtpUtils;
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.model.BookType;
 import cn.zdn.obs.params.BookParam;
 import cn.zdn.obs.service.BookService;
 import cn.zdn.obs.service.BookTypeService;
-import cn.zdn.obs.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -24,15 +20,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,9 +143,8 @@ public class BookController {
 
     //添加书籍
     @RequestMapping("/add")
-    @ResponseBody
     public String add(BookVO bookVO, Integer pageNum, Model model) {
-        //System.out.println(111);
+        System.out.println(111);
         //return "bookManager";
 
         //获取图片存放的物理路径

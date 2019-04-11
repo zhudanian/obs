@@ -103,7 +103,7 @@ public class BookServiceImpl implements BookService {
         //String filePath = bookDto.getUploadPath() + "\\" + fileName;
 
         //获取ftp服务器上的二级目录
-        String picSavePath = StringUtils.generateRandomDir(fileName);
+        String picSavePath ="/images";
 
 
         String filePath = "";
@@ -125,6 +125,7 @@ public class BookServiceImpl implements BookService {
             bookType.setBookTypeId(bookDto.getBookTypeId());
             book.setBookType(bookType);
             book.setOnSaleTime(new Date());
+            System.out.println(book);
             bookDao.insert(book);
 
 
