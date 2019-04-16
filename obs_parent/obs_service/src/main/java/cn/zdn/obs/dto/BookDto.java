@@ -12,6 +12,7 @@ public class BookDto {
     private String bookName;
     private String bookAuthor;
     private String bookPress;
+    private String bookDescription;
 
     private BigDecimal bookPrice;
 

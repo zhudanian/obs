@@ -17,14 +17,14 @@ public class OrderBookServiceImpl implements OrderBookService {
     private OrderBookDao orderBookDao;
 
     @Override
+    public List<OrderBook> queryByOrderId(Integer orderId) {
+        return orderBookDao.selectByOrderId(orderId);
+    }
+
+  /*  @Override
     public OrderBook queryByOrderBookId(Integer orderBookId) {
 
         return orderBookDao.select(orderBookId);
-    }
-
-    @Override
-    public List<OrderBook> queryAll() {
-        return orderBookDao.selectAll();
     }
 
     @Override
@@ -40,5 +40,5 @@ public class OrderBookServiceImpl implements OrderBookService {
     @Override
     public Integer remove(Integer orderBookId) {
         return orderBookDao.delete(orderBookId);
-    }
+    }*/
 }

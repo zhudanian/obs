@@ -19,4 +19,6 @@ public interface BookTypeService {
     Integer modifyStatus(Integer bookTypeId);
 
     List<BookType> queryEnable(Integer bookTypeEnable);
+
+    boolean checkBookTypeName(String bookTypeName);
 }

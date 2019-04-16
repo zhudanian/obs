@@ -1,15 +1,25 @@
 package cn.zdn.obs.front.controller;
 
 import cn.zdn.obs.constants.ResponseResult;
+import cn.zdn.obs.exceptions.CustomerNotExistException;
+import cn.zdn.obs.exceptions.SysuserNotExistException;
+import cn.zdn.obs.front.vo.CustomerVO;
+import cn.zdn.obs.model.Contact;
 import cn.zdn.obs.model.Customer;
+import cn.zdn.obs.service.ContactService;
 import cn.zdn.obs.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -19,59 +29,99 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private ContactService contactService;
 
-    @RequestMapping("/myCenter")
-    public String myCenter() {
+    @RequestMapping("toMyCenter")
+    public String myCenter(HttpSession httpSession, Model model) {
+        Integer customerId = ((Customer) httpSession.getAttribute("customer")).getCustomerId();
+        Customer customer = customerService.queryByCustomerId(customerId);
 
+        System.out.println(customerId);
+        List<Contact> contactList = contactService.queryAllContact(customerId);
+        System.out.println(contactList);
+        model.addAttribute("customer", customer);
+        model.addAttribute("contactList", contactList);
         return "myCenter";
     }
 
+    @RequestMapping("/toRegister")
+    public String toRegister() {
+        return "register";
+    }
+
+    @RequestMapping("/register")
+    public String register(Customer customer, Model model) {
+
+        customer.setCustomerPassword(DigestUtils.md5DigestAsHex(customer.getCustomerPassword().getBytes()));
+        Integer res = customerService.add(customer);
+        if (res == 1) {
+            model.addAttribute("successMessage", "注册成功!");
+            return "forward:/front/bookstore/showBookstore";
+        } else {
+            model.addAttribute("errorMessage", "注册失败!");
+            return "register";
+        }
+
+    }
+
     @RequestMapping("/toLogin")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
 
     @RequestMapping("/login")
-    public String login(String customerName, String customerPassword, Model model) {
-        model.addAttribute("customer",null);
-        Customer customer = customerService.queryCustomerByNameAndPassword(customerName, customerPassword);
-        //System.out.println(customer);
-        if (null == customer) {
-            model.addAttribute("customer", customer);
-            ResponseResult.success("登录成功!");
-            return "main";
-        } else {
-            ResponseResult.fail("密码错误!");
+    public String login(String customerName, String customerPassword, HttpSession session, Model model) throws CustomerNotExistException {
+        try {
+            Customer customer = customerService.queryCustomerByNameAndPassword(customerName, customerPassword);
+            //将该sysuser存入session作用域
+            session.setAttribute("customer", customer);
+
+            return "forward:/front/bookstore/showBookstore";
+
+        } catch (CustomerNotExistException e) {
+            //e.printStackTrace();
+            model.addAttribute("errorMsg", e.getMessage());
+            //返回视图名称,通过视图解析器，将该名称拼接成完整的页面路径，从而实现页面的返回
             return "login";
         }
     }
 
     @RequestMapping("/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("customer");
-        return "main";
+        httpSession.invalidate();
+
+        return "forward:/front/bookstore/showBookstore";
     }
 
-    @RequestMapping("checkNameNotExist")
+    @RequestMapping("/checkCustomerName")
     @ResponseBody
-    public ResponseResult checkNameNotExist(String customerName) {
-
-        customerService.checkNameExist(customerName);
-        return ResponseResult.fail("用户不存在!");
+    //自动将被校验的值注入
+    public Map<String, Object> checkCustomerName(String customerName) {
+        Map<String, Object> map = new HashMap<>();
+        boolean res = customerService.checkCustomerName(customerName);
+        //如果不存在该用户名，可用
+        if (res) {
+            map.put("valid", true);
+        } else {
+            map.put("valid", false);
+            map.put("message", "账号【" + customerName + "】已经存在");
+        }
+        return map;
     }
 
-    @RequestMapping("/checkNameExist")
-    public ResponseResult checkNameExist(String customerName) {
-
-        customerService.checkNameExist(customerName);
-        return ResponseResult.fail("用户名已被使用!");
-    }
-
-    @RequestMapping("/register")
+    //修改账号信息
+    @RequestMapping("/modifyBaseInfo")
     @ResponseBody
-    public ResponseResult register(Customer customer) {
-        customerService.add(customer);
-        return ResponseResult.success("注册成功!");
+    public ResponseResult modifyBaseInfo(Customer customer,HttpSession httpSession) {
+        customer.setCustomerId (((Customer)httpSession.getAttribute("customer")).getCustomerId());
+        System.out.println(customer);
+        Integer res = customerService.modify(customer);
+        if (res == 1) {
+            return ResponseResult.success("修改成功！");
+        } else {
+            return ResponseResult.fail("修改失败!");
+        }
     }
 
     @RequestMapping("/beMember")

@@ -64,16 +64,6 @@ public class BookServiceImpl implements BookService {
         return bookDao.selectNewBook();
     }
 
-    @Override
-    public boolean addToCart(Integer bookId, ShoppingCart bookItem) {
-        Book book = bookDao.select(bookId);
-        if (book != null) {
-            bookItem.addBook(book);
-            return true;
-
-        }
-        return false;
-    }
 
     @Override
     public List<Book> queryByInput(String inputString) {

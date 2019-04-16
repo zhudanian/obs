@@ -2,6 +2,7 @@ package cn.zdn.obs.cart;
 
 
 import cn.zdn.obs.model.Book;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -29,14 +30,14 @@ public class ShoppingCart {
      * 查看当前购物车中是否已经有该商品，如果有,不新增记录，只数量+1，如果没有，在购物车中新增一条记录，数量初始化为1
      *
      */
-    public void addBook(Book book){
+    public void addBook(Book book, Integer num){
         ShoppingCartItem sci= books.get(book.getBookId());
         if(sci==null){
             sci=new ShoppingCartItem(book);
             books.put(book.getBookId(),sci);
         }
         else{
-            sci.increment();
+            sci.setQuantity(num+sci.getQuantity());
         }
 
     }

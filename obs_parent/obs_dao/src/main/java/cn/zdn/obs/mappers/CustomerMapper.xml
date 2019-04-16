@@ -12,15 +12,61 @@
          customer_phone,
          customer_register_date
     </sql>
-    <resultMap id="customerResultMap" type="Customer">
-        <id column="customer_id" property="customerId" jdbcType="INTEGER" />
-        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
-        <result column="customer_password" property="customerPassword" jdbcType="VARCHAR" />
-        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
-        <result column="customer_phone" property="customerPhone" jdbcType="VARCHAR" />
-        <result column="customer_register_date" property="customerRegisterDate" jdbcType="TIMESTAMP" />
+
+    <resultMap id="customerResultMap1" type="Customer">
+        <id column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="customer_password" property="customerPassword" jdbcType="VARCHAR"/>
+        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR"/>
+        <result column="customer_phone" property="customerPhone" jdbcType="VARCHAR"/>
+        <result column="customer_register_date" property="customerRegisterDate" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <select id="select" resultMap="customerResultMap">
+
+    <!--<resultMap id="customerResultMap2" type="Customer">
+        <id column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="customer_password" property="customerPassword" jdbcType="VARCHAR"/>
+        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR"/>
+        <result column="customer_phone" property="customerPhone" jdbcType="VARCHAR"/>
+        <result column="customer_register_date" property="customerRegisterDate" jdbcType="TIMESTAMP"/>
+
+        <collection property="orderList" ofType="Order">
+            <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+            <result column="confirm_date" property="confirmDate"/>
+            <result column="order_state" property="orderState"/>
+            <result column="total_price" property="totalPrice"/>
+        </collection>
+
+        <collection property="cartList" ofType="Cart">
+            <id column="cart_id" property="cartId"/>
+            <result column="book_quantity" property="bookQuantity"/>
+            <result column="book_total_price" property="bookTotalPrice"/>
+        </collection>
+
+        <collection property="contactList" ofType="Contact">
+            <id column="contact_id" property="contactId"/>
+            <result column="contact_name" property="contactName"/>
+            <result column="contact_address" property="contactAddress"/>
+        </collection>
+
+        <collection property="commentList" ofType="Comment">
+            <id column="comment_id" property="commentId"/>
+            <result column="comment_content" property="commentContent"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="customerResultMap3" type="Customer">
+        <id column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <collection property="orderList" ofType="Order">
+            <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+            <result column="confirm_date" property="confirmDate"/>
+            <result column="order_state" property="orderState"/>
+            <result column="total_price" property="totalPrice"/>
+        </collection>
+    </resultMap>-->
+
+    <select id="select" resultMap="customerResultMap1">
         select
         <include refid="customerColumn"/>
         from
@@ -29,14 +75,14 @@
         customer_id=#{customerId}
     </select>
 
-    <select id="selectAll" resultMap="customerResultMap">
+    <select id="selectAll" resultMap="customerResultMap1">
         select
         <include refid="customerColumn"/>
         from
         customer
     </select>
 
-    <select id="selectCustomerByNameAndPassword" resultMap="customerResultMap">
+    <select id="selectCustomerByNameAndPassword" resultMap="customerResultMap1">
         select
         <include refid="customerColumn"/>
         from
@@ -49,30 +95,43 @@
 
     <update id="update" parameterType="Customer">
         update
-        customer
-        set
-        customer_name=#{customerName},
-        customer_address=#{customerAddress},
-        customer_phone=#{customerPhone}
-        where
-        customer_id=#{customerId}
+            customer
+        set customer_name=#{customerName},
+            customer_address=#{customerAddress},
+            customer_phone=#{customerPhone}
+        where customer_id = #{customerId}
     </update>
 
     <insert id="insert" parameterType="Customer">
-        insert into
-        customer
-        values (
+        insert into customer
+        (customer_id,
+         customer_name,
+         customer_password,
+         customer_address,
+         customer_phone,
+         customer_register_date,
+         vip_end_date)
+        values (null,
                 #{customerName},
                 #{customerPassword},
                 #{customerAddress},
-                #{customerPassword}
-               )
+                #{customerPhone},
+                now(),
+                null)
     </insert>
 
     <delete id="delete">
-        delete from
+        delete
+        from customer
+        where customer_id = #{customerId}
+    </delete>
+
+    <select id="selectCustomerByCustomerName" resultMap="customerResultMap1">
+        select
+        <include refid="customerColumn"/>
+        from
         customer
         where
-        customer_id=#{customerId}
-    </delete>
+        customer_name=#{customerName}
+    </select>
 </mapper>

@@ -29,7 +29,7 @@ public interface BookService {
 
     List<Book> queryNewBook();
 
-    boolean addToCart(Integer bookId, ShoppingCart bookItem);
+
 
     List<Book> queryByInput(String inputString);
 

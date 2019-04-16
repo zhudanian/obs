@@ -26,18 +26,22 @@
     height: 450px;
     width: 800px;
 }
-.item > div{
+
+.item > div {
     float: left;
     margin-left: -500px;
 }
+
 .item > div h3 {
     margin-left: 10px;
     color: #0da61c;
 }
+
 .item > div h2 {
     margin-left: 20px;
     color: #da3b10;
 }
+
 .item > div h1 {
     margin-left: 30px;
     color: #145bda;
@@ -50,17 +54,19 @@
     border-radius: 20px;
     border: #daba03 solid 3px;
 }
+
 .bookstore-center {
     margin-top: 40px;
-    height: 600px;
+    height: auto;
 }
 
 .category-area {
     border: #daba03 solid 3px;
     border-radius: 30px;
-    height: 600px;
+    height: auto;
 }
-.menu ul{
+
+.menu ul {
     float: left;
     padding-left: 60px;
 }
@@ -72,7 +78,25 @@
     text-align: left;
     font-size: 18pt;
 }
-.card{
-    width: 50px;
-    height: 100px;
+
+.card {
+    height: 350px;
+    width: 200px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-right: 10px;
+    border: #f8bf0f solid 3px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+.footer {
+    position: relative;
+    margin-top: 100px;
+    /* footer高度的负值 */
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    clear: both;
+    color: rgb(59, 17, 23);
+    background: rgba(254, 188, 18, 0.79);
 }

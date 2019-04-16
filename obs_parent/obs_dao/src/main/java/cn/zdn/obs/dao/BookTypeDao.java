@@ -21,4 +21,6 @@ public interface BookTypeDao{
     Integer updateStatus(Integer bookTypeId);
 
     List<BookType> selectByBookTypeState(Integer bookTypeEnable);
+
+    BookType selectByBookTypeName(String bookTypeName);
 }

@@ -4,52 +4,82 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.zdn.obs.dao.CommentDao">
 
+
     <sql id="commentColumn">
-         comment_id,
-         book_id,
-         customer_id,
-         comment_content
+        comment_id,
+        customer_id,
+        order_id,
+        comment_content,
+        comments.user_response
     </sql>
+
+    <sql id="commentColumn1">
+        comments.comment_id,
+        comments.comment_content,
+        customer.customer_name,
+        orders.order_id,
+        comments.user_response
+    </sql>
+
     <resultMap id="CommentResultMap" type="Comment">
-        <id column="comment_id" property="commentId" jdbcType="VARCHAR"/>
-        <result column="book_id" property="bookId" jdbcType="INTEGER"/>
-        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <id column="comment_id" property="commentId" jdbcType="INTEGER"/>
         <result column="comment_content" property="commentContent" jdbcType="VARCHAR"/>
+        <result column="user_response" property="userResponse" jdbcType="VARCHAR"/>
+        <association property="customer" javaType="Customer">
+            <id column="customer_id" property="customerId"/>
+            <result column="customer_name" property="customerName"/>
+        </association>
+        <association property="order" javaType="Order">
+            <id column="order_id" property="orderId"/>
+        </association>
     </resultMap>
-    <select id="select" resultMap="CommentResultMap" parameterType="integer">
+
+    <!--后台-->
+    <select id="selectAll" resultMap="CommentResultMap" parameterType="integer">
         select
-        <include refid="commentColumn"/>
-        from
-        comment
-        where
-        comment_id=#{commentId}
+        <include refid="commentColumn1"/>
+        from comments,customer,orders
+        where comments.customer_id=customer.customer_id
+        and comments.order_id=orders.order_id
     </select>
 
-    <select id="selectAll" resultMap="CommentResultMap">
-        select
-        <include refid="commentColumn"/>
-        from
-        comment
+    <select id="selectUserResponse" resultType="string">
+        select user_response
+        from comments
+        where comment_id = #{commentId}
     </select>
+
+    <update id="updateUserResponse">
+        update comments
+        set user_response = #{userPesponse}
+        where comment_id = #{commentId}
+    </update>
+
+    <!-- 前台-->
+    <select id="selectByCustomerId" resultMap="CommentResultMap" parameterType="integer">
+        select
+        <include refid="commentColumn1"/>
+        from comments,customer,orders
+        where comments.customer_id=customer.customer_id
+        and comments.order_id=orders.order_id
+        and customer.customer_id=#{customerId}
+    </select>
+
+    <insert id="insert" parameterType="Comment">
+        insert into comments(comment_id, order_id, customer_id, comment_content)
+        values (null, #{customerId}, #{commentId}, #{commentContent})
+    </insert>
 
     <update id="update">
-        update
-            comment
+        update comments
         set comment_content=#{commentContent}
         where comment_id = #{commentId}
     </update>
 
-    <insert id="insert" parameterType="Comment">
-        insert into comment
-        values (#{bookId},
-                #{commentContent},
-                #{customerId})
-
-    </insert>
-
     <delete id="delete">
         delete
-        from comment
+        from comments
         where comment_id = #{commentId}
     </delete>
+
 </mapper>

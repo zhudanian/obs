@@ -3,7 +3,7 @@
 <body>
 <h2>Hello World!</h2>
 <%
-    request.getRequestDispatcher("/showMain").forward(request,response);
+    request.getRequestDispatcher("/front/bookstore/showBookstore").forward(request,response);
 %>
 </body>
 </html>

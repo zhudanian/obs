@@ -49,6 +49,15 @@ public class BookTypeServiceImpl implements BookTypeService {
     }
 
     @Override
+    public boolean checkBookTypeName(String bookTypeName) {
+        BookType bookType = bookTypeDao.selectByBookTypeName(bookTypeName);
+        if(bookType!=null){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public Integer remove(Integer bookTypeId) {
         return bookTypeDao.delete(bookTypeId);
     }

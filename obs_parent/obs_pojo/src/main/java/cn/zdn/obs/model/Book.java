@@ -16,7 +16,8 @@ public class Book implements Serializable {
     private BigDecimal bookPrice;
     private String bookDescription;
     private Integer bookHot;
-    private BookType BookType;
     private Date onSaleTime;
- //   private Comment comment;
+
+    //书对书籍 ：一对多
+    private BookType BookType;
 }

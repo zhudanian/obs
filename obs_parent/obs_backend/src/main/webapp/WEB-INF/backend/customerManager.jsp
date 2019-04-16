@@ -1,5 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zh">
@@ -15,6 +15,7 @@
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
     <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <script src="${pageContext.request.contextPath}/js/obs.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css"/>
     <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
@@ -34,8 +35,8 @@
                     $('#customerName_m').text(responseResult.obj.customerName);
                     $('#customerAddress_m').text(responseResult.obj.customerAddress);
                     $('#customerPhone_m').text(responseResult.obj.customerPhone);
-                    $('#customerRegisterDate_m').text(responseResult.obj.customerRegisterDate);
-        });
+                    $('#customerRegisterDate_m').text(jsonDateFormat(responseResult.obj.customerRegisterDate));
+                });
 
             $('#showCustomerModal').modal('show');
         }
@@ -78,7 +79,7 @@
         </div>
 
         <div class="show-list" style="position: relative;top: 30px;">
-            <table class="table table-bordered table-hover" style='text-align: center;'>
+            <table class="table table-bordered table-hover table-striped" style='text-align: center;'>
                 <thead>
                 <tr class="text-danger">
                     <th class="text-center">编号</th>
@@ -96,8 +97,7 @@
                         <td>${customer.customerName}</td>
                         <td>${customer.customerPhone}</td>
                         <td>${customer.customerAddress}</td>
-                        <td>${customer.customerRegisterDate}</td>
-                      <%--  <td><fmt:formatDate value="${customer.customerRegisterDate}" pattern="yyyy年MM月dd日"/></td>--%>
+                        <td><fmt:formatDate value="${customer.customerRegisterDate}" pattern="yyyy年MM月dd日"/></td>
                         <td class="text-center">
                             <button type="button" class="btn btn-primary btn-sm"
                                     onclick="showCustomerModal(${customer.customerId})">查看
@@ -117,7 +117,7 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <input type="hidden" name="pageNum" value="${sysUser.pageNum}">
+        <input type="hidden" name="pageNum" value="${customer.pageNum}">
 
         <form enctype="multipart/form-data" class="form-horizontal" id="showCustomerForm">
             <div class="modal-content">

@@ -1,5 +1,6 @@
 package cn.zdn.obs.backend.controller;
 
+import cn.zdn.obs.exceptions.SysuserNotExistException;
 import cn.zdn.obs.params.SysUserParam;
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
@@ -10,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,53 +28,34 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
-    /*   //在执行该controller下的任意方式之前执行
-    @ModelAttribute("roles")
-    public List<Role> loadRoles() {
-        return roleService.findAll();
-    }*/
-
-
-    @RequestMapping("/main")
-    public String main() {
-        return "main";
-    }
-
-    /*@RequestMapping("/login")
-    public String login(String sysLoginName, String sysPassword, HttpSession session, Model model) {
-        SysUser sysUser = sysUserService.queryBySysLoginNameAndSysPassword(sysLoginName, sysPassword);
-        if (null != sysUser) {
-            //将该sysUser存入session作用域
-            session.setAttribute("sysUser", sysUser);
-            //返回视图名称,通过视图解析器，将该名称拼接成完整的页面路径，从而实现页面的返回
-            return "main";
-        } else {
-            model.addAttribute("errorMsg", "用户名或密码错误");
-            return "login";
-        }
-    }
-*/
 
     @RequestMapping("/login")
-    public String login(String sysLoginName, String sysPassword, HttpSession session, Model model) {
-        SysUser sysUser = sysUserService.queryBySysLoginNameAndSysPassword(sysLoginName, sysPassword);
-        if (null != sysUser) {
-            model.addAttribute("errorMsg", "用户名或密码错误");
-            return "login";
-        } else {
-
-            //将该sysUser存入session作用域
+    public String login(String sysLoginName, String sysPassword, HttpSession session, Model model) throws SysuserNotExistException {
+        try {
+            SysUser sysUser = sysUserService.queryBySysLoginNameAndSysPassword(sysLoginName, sysPassword);
+            //将该sysuser存入session作用域
             session.setAttribute("sysUser", sysUser);
             //返回视图名称,通过视图解析器，将该名称拼接成完整的页面路径，从而实现页面的返回
             return "main";
+        } catch (SysuserNotExistException e) {
+            //e.printStackTrace();
+            model.addAttribute("errorMsg", e.getMessage());
+            return "login";
         }
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public void logout(HttpSession httpSession) {
+        httpSession.invalidate();
     }
 
     @RequestMapping("/add")
     @ResponseBody
     public ResponseResult add(SysUser sysUser) {
+        sysUser.setSysPassword(DigestUtils.md5DigestAsHex(sysUser.getSysPassword().getBytes()));
         Integer res = sysUserService.add(sysUser);
-        if (res > 0) {
+        if (res == 1) {
             return ResponseResult.success("添加成功");
         } else {
             return ResponseResult.fail("添加失败");
@@ -81,12 +64,9 @@ public class SysUserController {
 
     @RequestMapping("/modify")
     @ResponseBody
-    public ResponseResult modify(Integer sysId) {
-
-        SysUser sysUser = sysUserService.queryBySysId(sysId);
-
-        Integer res = sysUserService.modify(sysId, sysUser);
-        if (res > 0) {
+    public ResponseResult modify(SysUser sysUser) {
+        Integer res = sysUserService.modify(sysUser);
+        if (res == 1) {
             return ResponseResult.success("修改成功");
         } else {
             return ResponseResult.fail("修改失败");
@@ -96,9 +76,9 @@ public class SysUserController {
 
     @RequestMapping("/modifyStatus")
     @ResponseBody
-    public ResponseResult modifyStatus(int id) {
-        Integer res = sysUserService.modifyStatus(id);
-        if (res > 0) {
+    public ResponseResult modifyStatus(Integer sysId) {
+        Integer res = sysUserService.modifyStatus(sysId);
+        if (res == 1) {
             return ResponseResult.success("更新成功");
         } else {
             return ResponseResult.fail("更新失败");
@@ -108,19 +88,19 @@ public class SysUserController {
 
 
     //校验该登录账号是否已经存在
-    @RequestMapping("/checkName")
+    @RequestMapping("/checkSysLoginName")
     @ResponseBody
     //自动将被校验的值注入
-    public Map<String, Object> checkName(String loginName) {
+    public Map<String, Object> checkSysLoginName(String sysLoginName, Integer sysId) {
 
         Map<String, Object> map = new HashMap<>();
-        boolean res = sysUserService.checkName(loginName);
+        boolean res = sysUserService.checkSysLoginName(sysLoginName, sysId);
         //如果不存在该用户名，可用
         if (res) {
             map.put("valid", true);
         } else {
             map.put("valid", false);
-            map.put("message", "账号【" + loginName + "】已经存在");
+            map.put("message", "账号【" + sysLoginName + "】已经存在");
         }
         return map;
 
@@ -137,6 +117,13 @@ public class SysUserController {
         PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
         model.addAttribute("sysUser", pageInfo);
         return "sysUserManager";
+    }
+
+    @RequestMapping("queryBySysId")
+    @ResponseBody
+    public ResponseResult queryBySysId(Integer sysId) {
+        SysUser sysUser = sysUserService.queryBySysId(sysId);
+        return ResponseResult.success(sysUser);
     }
 
     @RequestMapping("/queryBySysUserParams")

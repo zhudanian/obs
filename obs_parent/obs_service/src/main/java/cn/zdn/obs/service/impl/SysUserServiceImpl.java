@@ -2,6 +2,7 @@ package cn.zdn.obs.service.impl;
 
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.dao.SysUserDao;
+import cn.zdn.obs.exceptions.SysuserNotExistException;
 import cn.zdn.obs.model.SysUser;
 import cn.zdn.obs.params.SysUserParam;
 import cn.zdn.obs.service.SysUserService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -21,14 +23,21 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public SysUser queryBySysLoginNameAndSysPassword(String sysLoginName, String sysPassword) {
-        SysUser sysUser = sysUserDao.selectBySysLoginNameAndSysPassword(sysLoginName, sysPassword, Constant.SYSUSER_VALID);
-        return sysUser;
+    public SysUser queryBySysLoginNameAndSysPassword(String sysLoginName, String sysPassword)  throws SysuserNotExistException {
+        SysUser sysUser= sysUserDao.selectBySysLoginNameAndSysPassword(sysLoginName, DigestUtils.md5DigestAsHex(sysPassword.getBytes()), Constant.SYSUSER_VALID);
+        if(sysUser!=null){
+            return sysUser;
+        }
+        throw  new SysuserNotExistException("用户名或密码不正确");
     }
 
     @Override
-    public boolean checkName(String loginName) {
-        return false;
+    public boolean checkSysLoginName(String sysLoginName, Integer sysId) {
+        SysUser sysUser = sysUserDao.selectBySysLoginNameAndSysId(sysLoginName,sysId);
+        if(sysUser!=null){
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -47,8 +56,8 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public Integer modify(Integer sysId, SysUser sysUser) {
-        return sysUserDao.update(sysId, sysUser);
+    public Integer modify(SysUser sysUser) {
+        return sysUserDao.update(sysUser);
 
     }
 

@@ -8,11 +8,11 @@ import java.util.List;
 public interface OrderBookDao{
 
 
-    OrderBook select(Integer orderBookId);
+   // OrderBook select(Integer orderBookId);
 
-    List<OrderBook> selectAll();
+    List<OrderBook> selectByOrderId(Integer orderBookId);
 
-    Integer insert(OrderBook orderBook);
+    //Integer insert(OrderBook orderBook);
 
     Integer update(OrderBook orderBook);
 

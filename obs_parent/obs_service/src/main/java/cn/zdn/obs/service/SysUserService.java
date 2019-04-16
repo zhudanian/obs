@@ -1,5 +1,6 @@
 package cn.zdn.obs.service;
 
+import cn.zdn.obs.exceptions.SysuserNotExistException;
 import cn.zdn.obs.model.SysUser;
 import cn.zdn.obs.params.SysUserParam;
 
@@ -7,9 +8,9 @@ import java.util.List;
 
 public interface SysUserService {
 
-    SysUser queryBySysLoginNameAndSysPassword(String sysLoginName, String sysPassword);
+    SysUser queryBySysLoginNameAndSysPassword(String sysLoginName, String sysPassword)  throws SysuserNotExistException;
 
-    boolean checkName(String loginName);
+    boolean checkSysLoginName(String sysLoginName, Integer sysId);
 
     List<SysUser> queryBySysUserParams(SysUserParam sysUserParam);
 
@@ -19,7 +20,7 @@ public interface SysUserService {
 
     Integer modifyStatus(Integer sysId);
 
-    Integer modify(Integer sysId, SysUser sysUser);
+    Integer modify(SysUser sysUser);
 
     SysUser queryBySysId(Integer sysId);
 }

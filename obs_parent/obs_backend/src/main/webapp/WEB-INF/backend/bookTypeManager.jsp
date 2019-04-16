@@ -9,16 +9,60 @@
     <title>backend</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-table.css"/>
     <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
     <script SRC="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
-    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-table.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-table.css"/>
+    <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css">
     <script>
-
         $(function () {
+            $('#addBookTypeForm').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    bookTypeName: {
+                        validators: {
+                            notEmpty: {
+                                message: '书籍类型不能为空'
+                            },
+                            remote: {
+                                url: '${pageContext.request.contextPath}/backend/bookTypeManager/checkBookTypeName'
+                            }
+                        }
+                    }
+                }
+
+            });
+            $('#modifyBookTypeForm').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    bookTypeName: {
+                        validators: {
+                            notEmpty: {
+                                message: '书籍类型不能为空'
+                            },
+                            remote: {
+                                url: '${pageContext.request.contextPath}/backend/bookTypeManager/checkBookTypeName'
+                            }
+                        }
+                    }
+                }
+
+            });
+
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
                 //主版本号
@@ -47,40 +91,53 @@
                     }
                 }
             });
+            //服务端校验
+            var errorMsg = '${message}';
+            if (errorMsg != '') {
+                layer.msg(errorMsg, {
+                    time: 2000,
+                    skin: 'errorMsg'
+                });
+            }
         });
+
 
         //添加商品类型
         function addBookType() {
-            $.post(
-                '${pageContext.request.contextPath}/backend/bookTypeManager/add',
-                {'bookTypeName': $('#bookTypeName').val()},
-                function (responseResult) {
-                    //alert(data.message);
-                    //如果添加成功
-                    if (responseResult.status == 1) {
-                        //使用layer.js弹出一个弹出框
-                        layer.msg(responseResult.message,
-                            {
-                                time: 2000,//2秒钟后隐藏弹出框
-                                skin: 'successMsg'//设置弹出框的样式
-                            },
-                            function () {
-                                $("#BookTypeTable").bootstrapTable('refresh');
-                            }
-                        );
-                    } else {
-                        layer.msg(responseResult.message, {
-                            time: 2000,//2秒钟后隐藏弹出框
-                            skin: 'errorMsg'//设置弹出框的样式
+            var bv = $('#addBookTypeForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post(
+                    '${pageContext.request.contextPath}/backend/bookTypeManager/add',
+                    {'bookTypeName': $('#bookTypeName').val()},
+                    function (responseResult) {
+                        alert(responseResult.status);
+                        if (responseResult.status == 1) {
 
-                        });
-                    }
-                });
+                            //使用layer.js弹出一个弹出框
+                            layer.msg(
+                                responseResult.message,
+                                {
+                                    time: 2000,//2秒钟后隐藏弹出框
+                                    skin: 'successMsg'//设置弹出框的样式
+                                },
+                                function () {
+                                    $("#BookTypeTable").bootstrapTable('refresh');
+                                }
+                            );
+                        } else {
+                            layer.msg(responseResult.message, {
+                                time: 2000,//2秒钟后隐藏弹出框
+                                skin: 'errorMsg'//设置弹出框的样式
+                            });
+                        }
+                    });
+            }
         }
 
         //显示修改  书籍类型名称
         function modifyBookType(bookTypeId) {
-            alert(bookTypeId);
+            // alert(bookTypeId);
             $.post(
                 '${pageContext.request.contextPath}/backend/bookTypeManager/queryByBookTypeId',
                 {'bookTypeId': bookTypeId},
@@ -88,54 +145,62 @@
                     //console.log(result);
                     //如果成功，将值写入修改模态框
                     if (result.status == 1) {
-
                         $('#bookTypeId_m').val(result.obj.bookTypeId);
                         $('#bookTypeName_m').val(result.obj.bookTypeName);
-
                     }
                 });
             $('#modifyBookTypeModal').modal('show');
+
         }
 
         //修改商品类型名称
         function modifyName() {
-            $.ajax({
-                type: 'post',
-                url: '${pageContext.request.contextPath}/backend/bookTypeManager/modify',
-                data: {'bookTypeId': $('#bookTypeId_m').val(), 'bookTypeName': $('#bookTypeName_m').val()},
-                dataType: 'json',
-                success: function (result) {
-                    if (result.status == 1) {
-                        layer.msg(result.message, {
-                            time: 2000,
-                            skin: 'successMsg'
-                        }, function () {
-                            $("#BookTypeTable").bootstrapTable('refresh');
-                        });
+            var bv = $('#modifyBookTypeForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post(
+                    '${pageContext.request.contextPath}/backend/bookTypeManager/modify',
+                    {
+                        'bookTypeId': $('#bookTypeId_m').val(),
+                        'bookTypeName': $('#bookTypeName_m').val()
+                    },
+                    function (responseResult) {
+                       // alert(responseResult.status);
+                        if (responseResult.status == 1) {
 
-                    } else {
-                        layer.msg(result.message, {
-                            time: 2000,
-                            skin: 'errorMsg'
-                        });
-                    }
-                }
+                            //使用layer.js弹出一个弹出框
+                            layer.msg(
+                                responseResult.message,
+                                {
+                                    time: 2000,//2秒钟后隐藏弹出框
+                                    skin: 'successMsg'//设置弹出框的样式
+                                },
+                                function () {
+                                    $("#BookTypeTable").bootstrapTable('refresh');
+                                }
+                            );
+                        } else {
+                            layer.msg(responseResult.message, {
+                                time: 2000,//2秒钟后隐藏弹出框
+                                skin: 'errorMsg'//设置弹出框的样式
+                            });
+                        }
+                    });
+            }
 
-
-            });
         }
 
         //显示确认删除商品模态框
-        removeBookType = function (id) {
-            alert(id);
-            //将id值存入删除模态框的隐藏域
-            $('#bookTypeId').val(id);
-        }
+        /* removeBookType = function (id) {
+             alert(id);
+             //将id值存入删除模态框的隐藏域
+             $('#bookTypeId').val(id);
+         }
 
-        //删除商品类型
-        function deleteBookType() {
-            $.post(
-                '${pageContext.request.contextPath}/backend/bookTypeManager/removeByBookTypeId',
+         //删除商品类型
+         function deleteBookType() {
+             $.post(
+                 '${pageContext.request.contextPath}/backend/bookTypeManager/removeByBookTypeId',
                 {'bookTypeId': $('#bookTypeId').val()},
                 function (responseResult) {
                     if (responseResult.status == 1) {
@@ -149,17 +214,14 @@
                                 $('#BookTypeTable').bootstrapTable('refresh');
                             }
                         );
-
                     } else {
                         layer.msg(responseResult.message, {
                             time: 2000,
                             skin: 'errorMsg'
                         });
                     }
-
-
                 });
-        }
+        }*/
 
         //更新状态
         function modifyStatus(id, btn) {
@@ -226,10 +288,10 @@
                                     onclick="modifyBookType(${bookType.bookTypeId})">修改
                             </button>
 
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                    data-target="#removeBookTypeModal"
-                                    onclick="removeBookType(${bookType.bookTypeId});">删除
-                            </button>
+                                <%--  <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                          data-target="#removeBookTypeModal"
+                                          onclick="removeBookType(${bookType.bookTypeId});">删除
+                                  </button>--%>
 
                             <c:if test="${bookType.bookTypeState==1}">
                                 <input type="button" class="btn btn-danger btn-sm" value="禁用"
@@ -257,7 +319,7 @@
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
         <div class="modal-content">
-            <form action="">
+            <form id="addBookTypeForm">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
@@ -269,7 +331,7 @@
                         <div class="row text-right">
                             <label for="bookTypeName" class="col-sm-4 control-label">类型名称：</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="bookTypeName">
+                                <input type="text" class="form-control" id="bookTypeName" name="bookTypeName">
                             </div>
                         </div>
                     </form-group>
@@ -289,39 +351,41 @@
 <div class="modal fade" tabindex="-1" id="modifyBookTypeModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
-        <!-- 内容声明 -->
-        <div class="modal-content">
-            <!-- 头部、主体、脚注 -->
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">修改商品类型</h4>
-            </div>
-            <div class="modal-body text-center">
-                <div class="row text-right">
-                    <label for="bookTypeId_m" class="col-sm-4 control-label">编号：</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="bookTypeId_m" readonly>
+        <form id="modifyBookTypeForm">
+            <!-- 内容声明 -->
+            <div class="modal-content">
+                <!-- 头部、主体、脚注 -->
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">修改商品类型</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row text-right">
+                        <label for="bookTypeId_m" class="col-sm-4 control-label">编号：</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="bookTypeId_m" readonly>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-right">
+                        <label for="bookTypeName_m" class="col-sm-4 control-label">类型名称</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="bookTypeName_m" name="bookTypeName">
+                        </div>
                     </div>
                 </div>
-                <br>
-                <div class="row text-right">
-                    <label for="bookTypeName_m" class="col-sm-4 control-label">类型名称</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="bookTypeName_m">
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning updateProType" onclick="modifyName()">修改</button>
+                    <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-warning updateProType" onclick="modifyName()">修改</button>
-                <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 <!-- 修改商品类型 end -->
 
 <!-- 确认删除商品类型 start -->
-<div class="modal fade" tabindex="-1" id="removeBookTypeModal">
+<%--<div class="modal fade" tabindex="-1" id="removeBookTypeModal">
     <input type="hidden" id="bookTypeId"/>
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-sm">
@@ -342,7 +406,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>--%>
 <!-- 确认删除商品类型 end -->
 
 

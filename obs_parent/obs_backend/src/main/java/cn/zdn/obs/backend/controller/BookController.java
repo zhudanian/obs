@@ -144,7 +144,7 @@ public class BookController {
     //添加书籍
     @RequestMapping("/add")
     public String add(BookVO bookVO, Integer pageNum, Model model) {
-        System.out.println(111);
+        //System.out.println(111);
         //return "bookManager";
 
         //获取图片存放的物理路径
@@ -169,7 +169,7 @@ public class BookController {
         }
 
         //返回列表页面
-        return "forward:queryAll?pageNum=" + pageNum;//转发到findAll请求
+        return "forward:queryAll?pageNum"+pageNum;//转发到findAll请求
     }
 
     @RequestMapping("/showPic")

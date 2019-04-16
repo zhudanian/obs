@@ -14,14 +14,138 @@
     <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
-    <script SRC="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
-    <script SRC="${pageContext.request.contextPath}/layer/layer.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css">
+    <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css">
 
-    <%--<script>
+    <script>
         $(function () {
+            //添加用户表单的客户端校验
+            $('#addSysUserForm').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    sysName: {
+                        validators: {
+                            notEmpty: {
+                                message: '用户姓名不能为空'
+                            }
+                        }
+                    },
+                    sysLoginName: {
+                        validators: {
+                            notEmpty: {
+                                message: '登录账号不能为空'
+                            },
+                            remote: {
+                                //ajax后端校验该登录账号是否已经存在
+                                url: '${pageContext.request.contextPath}/backend/sysUserManager/checkSysLoginName'
+                            }
+                        }
+                    },
+                    sysPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            }
+                        }
+                    },
+                    confirmSysPassword: {
+                        validators: {
+                            notEmpty: {
+                                message: '确认密码不能为空'
+                            },
+                            identical: {
+                                field: 'sysPassword',
+                                message: '两次密码不一致'
+                            }
+                        }
+                    },
+                    sysPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: '电话号码不能为空'
+                            },
+                            regexp: {
+                                regexp: /^1\d{10}$/,
+                                message: '手机号格式错误'
+                            }
+                        }
+                    },
+                    sysEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: '邮箱不能为空'
+                            },
+                            emailAddress: {
+                                message: '邮箱格式不正确'
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            $('#modifySysUserForm').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    sysLoginName: {
+                        validators: {
+                            notEmpty: {
+                                message: '登录账号不能为空'
+                            },
+                            remote: {
+                                //ajax后端校验该登录账号是否已经存在
+                                url: '${pageContext.request.contextPath}/backend/sysUserManager/checkSysLoginName',
+                                type: "post",
+                                dataType: "json",
+                                data: {
+                                    sysLoginName: function () {
+                                        return $('#sysId_m').val();
+                                    },
+                                    sysId: function () {
+                                        return $('#sysId_m').val();
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    sysPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: '电话号码不能为空'
+                            },
+                            regexp: {
+                                regexp: /^1\d{10}$/,
+                                message: '手机号格式错误'
+                            }
+                        }
+                    },
+                    sysEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: '邮箱不能为空'
+                            },
+                            emailAddress: {
+                                message: '邮箱格式不正确'
+                            }
+                        }
+                    }
+                }
+
+            });
+
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
 
@@ -39,8 +163,6 @@
                     $('#pageNum').val(page);
                     //重新提交表单
                     $('#frmQuery').submit();
-
-
                 },
                 itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
                     switch (type) {
@@ -56,100 +178,42 @@
                         case "page":
                             return page;
                     }
-
-
                 }
-
-            });
-
-            //添加用户表单的客户端校验
-            $('#frmAddSysuser').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-
-                },
-                fields: {
-                    name: {
-                        validators: {
-                            notEmpty: {
-                                message: '用户姓名不能为空'
-                            }
-                        }
-                    },
-                    loginName: {
-                        validators: {
-                            notEmpty: {
-                                message: '登录账号不能为空'
-                            },
-                            remote: {
-                                //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/backend/sysUser/checkName'
-                            }
-                        }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: '密码不能为空'
-                            }
-                        }
-                    },
-                    phone: {
-                        validators: {
-                            notEmpty: {
-                                message: '电话号码不能为空'
-                            }
-                        }
-                    },
-                    email: {
-                        validators: {
-                            notEmpty: {
-                                message: '邮箱不能为空'
-                            },
-                            emailAddress: {
-                                message: '邮箱格式不正确'
-                            }
-                        }
-                    },
-                    roleId: {
-                        validators: {
-                            notEmpty: {
-                                message: '请选择角色'
-                            }
-                        }
-                    }
-
-
-                }
-
             });
         });
 
-        function addSysuser() {
-            //进行表单校验
-            var bv = $('#frmAddSysuser').data('bootstrapValidator');
+        function showChangeSysUserModel(sysId) {
+            $.post(
+                '${pageContext.request.contextPath}/backend/sysUserManager/queryBySysId',
+                {"sysId": sysId},
+                function (responseResult) {
+                    $('#sysId_m').val(responseResult.obj.sysId);
+                    $('#sysName_m').val(responseResult.obj.sysName);
+                    $('#sysLoginName_m').val(responseResult.obj.sysLoginName);
+                    $('#sysPhone_m').val(responseResult.obj.sysPhone);
+                    $('#sysEmail_m').val(responseResult.obj.sysEmail);
+                });
+            $('#modifySysUserModal').modal('show');
+        }
+
+        function modifySysUser() {
+            var bv = $('#modifySysUserForm').data('bootstrapValidator');
             bv.validate();
             if (bv.isValid()) {
-                //alert(1);
-                //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/sysUser/add',
+                $.post('${pageContext.request.contextPath}/backend/sysUserManager/modify',
                     //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
-                    $('#frmAddSysuser').serialize(), function (result) {
+                    $('#modifySysUserForm').serialize(), function (responseResult) {
 
-                        if (result.status == 1) {
-                            layer.msg(result.message, {
+                        if (responseResult.status == 1) {
+                            layer.msg(responseResult.message, {
                                 time: 2000,
                                 skin: 'successMsg'
                             }, function () {
-                             /*   location.href = '${pageContext.request.contextPath}/backend/sysUser/queryAll?pageNum='
-                                    +${data.pageNum};*/
-                                alert(1);
+                                $("#sysUserTable").bootstrapTable('refresh');
                             });
 
-                        } else if (result.status == 0) {
-                            layer.msg(result.message, {
+                        } else if (responseResult.status == 0) {
+                            layer.msg(responseResult.message, {
                                 time: 2000,
                                 skin: 'errorMsg'
                             });
@@ -160,29 +224,62 @@
 
         }
 
-        function modifyStatus(id, btn) {
-            //alert(id);
-            $.post('${pageContext.request.contextPath}/backend/sysUser/modifyStatus',
-                {'id': id}, function (result) {
-                    if (result.status == 1) {
-
-                        var $td = $(btn).parent().parent().children().eq(5);
+        function modifyStatus(sysId, btn) {
+            $.post(
+                '${pageContext.request.contextPath}/backend/sysUserManager/modifyStatus',
+                {'sysId': sysId},
+                function (responseResult) {
+                    if (responseResult.status == 1) {
+                        alert(1);
+                        var $td = $(btn).parent().parent().children().eq(6);
                         if ($td.text().trim() == '无效') {
                             $td.text('有效');
-                            $(btn).val('启用').removeClass('btn-danger').addClass('btn-success');
+                            $(btn).val('禁用').removeClass('btn-success').addClass('btn-danger');
+
                         } else {
                             $td.text('无效');
-                            $(btn).val('禁用').removeClass('btn-success').addClass('btn-danger');
+                            $(btn).val('启用').removeClass('btn-danger').addClass('btn-success');
                         }
-
-
                     }
-
-
                 });
         }
 
-    </script>--%>
+        function addSysUser() {
+            //alert(1);
+            //进行表单校验
+            var bv = $('#addSysUserForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                //alert(1);
+                //调用ajax到后台执行添加用户
+                $.post(
+                    '${pageContext.request.contextPath}/backend/sysUserManager/add',
+                    //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
+                    $('#addSysUserForm').serialize(),
+                    function (responseResult) {
+
+                        if (responseResult.status == 1) {
+                            layer.msg(responseResult.message, {
+                                time: 2000,
+                                skin: 'successMsg'
+                            }, function () {
+                                alert(1);
+                            });
+
+                        } else if (responseResult.status == 0) {
+                            layer.msg(responseResult.message, {
+                                time: 2000,
+                                skin: 'errorMsg'
+                            });
+                        }
+
+                    });
+            }
+
+        }
+
+
+    </script>
 </head>
 
 <body>
@@ -193,7 +290,7 @@
     </div>
     <div class="panel-body">
         <div>
-            <form class="form-inline"method="post" id="frmQuery">
+            <form class="form-inline" method="post" id="frmQuery">
                 <input type="hidden" id="pageNum" name="pageNum" value="${data.pageNum}"/>
 
                 <div class="form-group">
@@ -223,10 +320,10 @@
             </form>
         </div>
         <br>
-        <input type="button" value="添加系统用户" class="btn btn-primary" id="doAddManger">
-
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSysUserModal">添加系统用户
+        </button>
         <div class="show-list text-center" style="position: relative; top: 10px;">
-            <table class="table table-bordered table-hover" style='text-align: center;'>
+            <table class="table table-bordered table-hover table-striped" style='text-align: center;' id="sysUserTable">
                 <thead>
                 <tr class="text-danger">
                     <th class="text-center">序号</th>
@@ -253,10 +350,17 @@
                             <c:if test="${sysUser.isValid==0}">无效</c:if>
                         </td>
                         <td class="text-center">
-                            <input type="button" class="btn btn-warning btn-sm" value="修改"
-                                   onclick="showChangeBookModel(${sysUser.sysId})">
-                            <input type="button" class="btn btn-warning btn-sm" value="删除"
-                                   onclick="showRemoveBookModal(${sysUser.sysId})">
+                            <input type="button" class="btn btn-primary btn-sm" value="修改"
+                                   onclick="showChangeSysUserModel(${sysUser.sysId})">
+
+                            <c:if test="${sysUser.isValid==1}">
+                                <input type="button" class="btn btn-danger btn-sm" value="禁用"
+                                       onclick="modifyStatus(${sysUser.sysId},this)">
+                            </c:if>
+                            <c:if test="${sysUser.isValid==0}">
+                                <input type="button" class="btn btn-success btn-sm" value="启用"
+                                       onclick="modifyStatus(${sysUser.sysId},this)">
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -268,11 +372,11 @@
 </div>
 
 <!-- 添加系统用户 start -->
-<div class="modal fade" tabindex="-1" id="myMangerUser">
+<div class="modal fade" tabindex="-1" id="addSysUserModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog">
         <!-- 内容声明 -->
-        <form id="frmAddSysuser">
+        <form id="addSysUserForm">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
@@ -280,67 +384,70 @@
                     <h4 class="modal-title">添加系统用户</h4>
                 </div>
                 <div class="modal-body text-center">
-                    <div class="row text-right">
-                        <label for="marger-username" class="col-sm-4 control-label">用户姓名：</label>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="marger-username" class="col-sm-4 control-label">用户姓名：</label>
 
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="marger-username" name="name">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="marger-username" name="sysName">
+                            </div>
                         </div>
                     </div>
                     <br>
+                    <div class="form-group">
+                        <div class="row text-right">I
+                            <label for="marger-loginName" class="col-sm-4 control-label">登录帐号：</label>
 
-                    <div class="row text-right">
-                        <label for="marger-loginName" class="col-sm-4 control-label">登录帐号：</label>
-
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="marger-loginName" name="loginName">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="marger-loginName" name="sysLoginName">
+                            </div>
                         </div>
                     </div>
                     <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="marger-password" class="col-sm-4 control-label">登录密码：</label>
 
-                    <div class="row text-right">
-                        <label for="marger-password" class="col-sm-4 control-label">登录密码：</label>
-
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="marger-password" name="password">
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="marger-password" name="sysPassword">
+                            </div>
                         </div>
                     </div>
                     <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="marger-repassword" class="col-sm-4 control-label">确认登录密码：</label>
 
-                    <div class="row text-right">
-                        <label for="marger-phone" class="col-sm-4 control-label">联系电话：</label>
-
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="marger-phone" name="phone">
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="marger-repassword"
+                                       name="confirmSysPassword">
+                            </div>
                         </div>
                     </div>
                     <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="marger-phone" class="col-sm-4 control-label">联系电话：</label>
 
-                    <div class="row text-right">
-                        <label for="marger-adrees" class="col-sm-4 control-label">联系邮箱：</label>
-
-                        <div class="col-sm-4">
-                            <input type="email" class="form-control" id="marger-email" name="email">
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="marger-phone" name="sysPhone">
+                            </div>
                         </div>
                     </div>
                     <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="marger-email" class="col-sm-4 control-label">联系邮箱：</label>
 
-                    <div class="row text-right">
-                        <label for="role" class="col-sm-4 control-label">角&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色：</label>
-
-                        <div class=" col-sm-4">
-                            <select class="form-control" name="roleId">
-                                <option value="">--请选择--</option>
-                                <c:forEach items="${roles}" var="role">
-                                    <option value="${role.id}">${role.roleName}</option>
-                                </c:forEach>
-                            </select>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="marger-email" name="sysEmail">
+                            </div>
                         </div>
                     </div>
-                    <br>
+
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" onclick="addSysuser()">添加</button>
+                    <button class="btn btn-primary" onclick="addSysUser()">添加</button>
                     <button class="btn btn-primary cancel" data-dismiss="modal" type="button">取消</button>
                 </div>
             </div>
@@ -350,81 +457,79 @@
 <!-- 添加系统用户 end -->
 
 <!-- 修改系统用户 start -->
-<div class="modal fade" tabindex="-1" id="myModal-Manger">
+<div class="modal fade" tabindex="-1" id="modifySysUserModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog">
         <!-- 内容声明 -->
-        <div class="modal-content">
-            <!-- 头部、主体、脚注 -->
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">系统用户修改</h4>
+        <form id="modifySysUserForm">
+            <div class="modal-content">
+                <!-- 头部、主体、脚注 -->
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">系统用户修改</h4>
+                </div>
+
+                <div class="modal-body text-center">
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="sysId_m" class="col-sm-4 control-label">用户编号：</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="sysId_m" readonly="readonly" name="sysId">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="sysName_q" class="col-sm-4 control-label">用户姓名：</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="sysName_m" readonly="readonly"
+                                       name="sysName">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="sysLoginName_m" class="col-sm-4 control-label">登录帐号：</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="sysLoginName_m" name="sysLoginName">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="sysPhone_m" class="col-sm-4 control-label">联系电话：</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="sysPhone_m" name="sysPhone">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="row text-right">
+                            <label for="sysEmail_m" class="col-sm-4 control-label">联系邮箱：</label>
+
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="sysEmail_m" name="sysEmail">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="modifySysUser()">修改</button>
+                    <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
+                </div>
             </div>
-            <div class="modal-body text-center">
-                <div class="row text-right">
-                    <label for="MargerUsername" class="col-sm-4 control-label">用户编号：</label>
-
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="MargerStaffId" readonly="readonly">
-                    </div>
-                </div>
-                <br>
-
-                <div class="row text-right">
-                    <label for="MargerUsername" class="col-sm-4 control-label">用户姓名：</label>
-
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="MargerStaffname">
-                    </div>
-                </div>
-                <br>
-
-                <div class="row text-right">
-                    <label for="MargerLoginName" class="col-sm-4 control-label">登录帐号：</label>
-
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="MargerLoginName" readonly="readonly">
-                    </div>
-                </div>
-                <br>
-
-                <div class="row text-right">
-                    <label for="MargerPhone" class="col-sm-4 control-label">联系电话：</label>
-
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="MargerPhone">
-                    </div>
-                </div>
-                <br>
-
-                <div class="row text-right">
-                    <label for="MargerAdrees" class="col-sm-4 control-label">联系邮箱：</label>
-
-                    <div class="col-sm-4">
-                        <input type="email" class="form-control" id="MargerAdrees">
-                    </div>
-                </div>
-                <br>
-
-                <div class="row text-right">
-                    <label for="MargerRole" class="col-sm-4 control-label">角&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;色：</label>
-
-                    <div class=" col-sm-4">
-                        <select class="form-control" id="MargerRole">
-                            <option value="">--请选择--</option>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.roleName}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <br>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary doMargerModal">修改</button>
-                <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
-            </div>
-        </div>
+            <br>
+        </form>
     </div>
 </div>
 <!-- 修改系统用户 end -->

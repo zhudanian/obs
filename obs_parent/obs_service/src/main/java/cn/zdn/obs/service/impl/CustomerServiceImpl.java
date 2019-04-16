@@ -2,6 +2,7 @@ package cn.zdn.obs.service.impl;
 
 import cn.zdn.obs.dao.CustomerDao;
 import cn.zdn.obs.dao.CustomerDao;
+import cn.zdn.obs.exceptions.CustomerNotExistException;
 import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.service.CustomerService;
@@ -9,11 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerDao customerDao;
@@ -35,13 +37,21 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer queryCustomerByNameAndPassword(String customerName, String customerPassword) {
-        return customerDao.selectCustomerByNameAndPassword(customerName,customerPassword);
+    public Customer queryCustomerByNameAndPassword(String customerName, String customerPassword) throws CustomerNotExistException {
+        Customer customer = customerDao.selectCustomerByNameAndPassword(customerName, DigestUtils.md5DigestAsHex(customerPassword.getBytes()));
+        if (customer != null) {
+            return customer;
+        }
+        throw new CustomerNotExistException("用户名或密码不正确");
     }
 
     @Override
-    public void checkNameExist(String customerName) {
-
+    public boolean checkCustomerName(String customerName) {
+        Customer customer = customerDao.selectCustomerByCustomerName(customerName);
+        if(customer!=null){
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -61,7 +61,7 @@
                     bookName: {
                         validators: {
                             notEmpty: {
-                                message: '商品名称不能为空'
+                                message: '书名称不能为空'
                             },
                             remote: {
                                 //校验该名称是否已经在数据库中存在
@@ -176,37 +176,6 @@
             });
         });
 
-        //添加商品
-       /* function addBook() {
-            $.ajax({
-                type: 'post',
-                url: '${pageContext.request.contextPath}/backend/bookManager/add',
-                data: $("#addBookForm").serialize(),
-                success: function (responseResult) {
-                    //alert(data.message);
-                    //如果添加成功
-                    if (responseResult.status == 1) {
-                        //使用layer.js弹出一个弹出框
-                        layer.msg(responseResult.message,
-                            {
-                                time: 2000,//2秒钟后隐藏弹出框
-                                skin: 'successMsg'//设置弹出框的样式
-                            },
-                            function () {
-                                $("#BookTable").bootstrapTable('refresh');
-                            }
-                        );
-                    } else {
-                        layer.msg(responseResult.message, {
-                            time: 2000,//2秒钟后隐藏弹出框
-                            skin: 'errorMsg'//设置弹出框的样式
-
-                        });
-                    }
-                }
-            })
-        }
-*/
         //显示修改产品模态框
         function showChangeBookModel(bookId) {
             alert(bookId);
@@ -221,9 +190,9 @@
                     $('#bookPress_m').val(responseResult.obj.bookPress);
                     $('#bookPrice_m').val(responseResult.obj.bookPrice);
                     $('#bookDescription_m').val(responseResult.obj.bookDescription);
-                    $('#bookTypeId_m').val(responseResult.obj.bookTypeId);
+                    $('#bookTypeId_m').val(responseResult.obj.bookType.bookTypeId);
                     //设置图片预览
-                    /*   $('#bookImage_m').attr('src', '${pageContext.request.contextPath}/backend/bookManager/showPic?image=' + responseResult.book.bookImage);*/
+                    $('#bookImage_modify_preview').attr('src', '${pageContext.request.contextPath}/backend/bookManager/showPic?image=' + responseResult.obj.bookImage);
                 });
 
             $('#modifyBookModal').modal('show');
@@ -237,28 +206,28 @@
                 data: $("#modifyBookForm").serialize(),
                 success:
                     function (responseResult) {
-                    //如果添加成功
-                    if (responseResult.status == 1) {
-                        //使用layer.js弹出一个弹出框
-                        layer.msg(
-                            responseResult.message,
-                            {
+                        //如果添加成功
+                        if (responseResult.status == 1) {
+                            //使用layer.js弹出一个弹出框
+                            layer.msg(
+                                responseResult.message,
+                                {
+                                    time: 2000,//2秒钟后隐藏弹出框
+                                    skin: 'successMsg'//设置弹出框的样式
+                                },
+                                function () {
+                                    //$("#BookTable").bootstrapTable('refresh');
+                                    alert(1);
+                                }
+                            );
+                        } else {
+                            layer.msg(responseResult.message, {
                                 time: 2000,//2秒钟后隐藏弹出框
-                                skin: 'successMsg'//设置弹出框的样式
-                            },
-                            function () {
-                                //$("#BookTable").bootstrapTable('refresh');
-                                alert(1);
-                            }
-                        );
-                    } else {
-                        layer.msg(responseResult.message, {
-                            time: 2000,//2秒钟后隐藏弹出框
-                            skin: 'errorMsg'//设置弹出框的样式
+                                skin: 'errorMsg'//设置弹出框的样式
 
-                        });
+                            });
+                        }
                     }
-                }
             })
         }
 
@@ -270,7 +239,7 @@
             $('#removeBookModal').modal('show');
         }
 
-        //删除商品
+        //删除书籍
         function removeBook() {
             $.post(
                 '${pageContext.request.contextPath}/backend/bookManager/removeByBookId',
@@ -307,7 +276,7 @@
         <br>
         <br>
         <div class="show-list text-center">
-            <table class="table table-bordered table-hover" style='text-align: center;' id="BookTable">
+            <table class="table table-bordered table-hover table-striped" style='text-align: center;' id="BookTable">
                 <thead>
                 <tr class="text-danger">
                     <th class="text-center">编号</th>
@@ -331,7 +300,7 @@
                             <c:if test="${book.bookType.bookTypeState==0}">无效商品</c:if>
                         </td>
                         <td class="text-center">
-                            <input type="button" class="btn btn-warning btn-sm" value="修改"
+                            <input type="button" class="btn btn-primary btn-sm" value="修改"
                                    onclick="showChangeBookModel(${book.bookId})">
                             <input type="button" class="btn btn-warning btn-sm" value="删除"
                                    onclick="showRemoveBookModal(${book.bookId})">
@@ -351,7 +320,9 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form id="addBookForm" enctype="multipart/form-data" class="form-horizontal"  action="${pageContext.request.contextPath}/backend/bookManager/add" method="post">
+        <form id="addBookForm" enctype="multipart/form-data" class="form-horizontal"
+              action="${pageContext.request.contextPath}/backend/bookManager/add" method="post">
+            <input type="hidden" name="pageNum" value="${pageInfo.pageNum}">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
@@ -509,7 +480,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" type="button" data-dismiss="modal" onclick="modifyBook()">修改</button>
+                        <button class="btn btn-primary" type="button" onclick="modifyBook()">修改
+                        </button>
                         <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                     </div>
                 </div>

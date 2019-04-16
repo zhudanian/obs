@@ -5,42 +5,34 @@
 <mapper namespace="cn.zdn.obs.dao.OrderBookDao">
 
     <sql id="orderBookColumn">
-         id,
-         order_id,
-         book_id,
-         num,
-         price
+        order_book.id,
+        order_book.num,
+        book.book_name,
+        book.book_image,
+        book.book_price
     </sql>
+
     <resultMap id="orderBookResultMap" type="OrderBook">
         <id column="id" property="id" jdbcType="INTEGER" />
-
         <result column="num" property="num" jdbcType="INTEGER" />
-        <result column="price" property="price" jdbcType="DECIMAL" />
-        <association property="bookId" javaType="Book">
+        <collection property="bookList" ofType="Book">
             <id column="book_id" property="bookId"/>
             <result column="book_name" property="bookName"/>
             <result column="book_image" property="bookImage"/>
-        </association>
-        <association property="orderId" javaType="Order">
-            <id column="order_id" property="orderId"/>
-            <result column="confirm_date" property="confirmDate"/>
-            <result column="customer_id" property="customerId"/>
-        </association>
+            <result column="book_price" property="bookPrice"/>
+        </collection>
     </resultMap>
-    <select id="select" resultType="OrderBook">
-        select
-        <include refid="orderBookColumn"/>
-        from
-        order_book
-        where
-        id=#{id}
-    </select>
 
-    <select id="selectAll" resultType="OrderBook">
+
+    <select id="selectByOrderId" resultMap="orderBookResultMap">
         select
         <include refid="orderBookColumn"/>
         from
-        order_book
+        order_book,book
+        where
+        order_book.book_id=book.book_id
+        and
+        order_book.order_id=#{orderBookId}
     </select>
 
     <update id="update">
@@ -59,13 +51,5 @@
         id=#{id}
     </delete>
 
-    <insert id="insert">
-        insert into
-        order_book
-        values(
-              num=#{num},
-              price=${price}
-              )
-    </insert>
 
 </mapper>

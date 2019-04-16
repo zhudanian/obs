@@ -10,10 +10,10 @@
         book_type_state
     </sql>
 
-    <resultMap id="BookTypeMap" type="BookType" >
-        <id column="book_type_id" property="bookTypeId" jdbcType="INTEGER" />
-        <result column="book_type_name" property="bookTypeName" jdbcType="VARCHAR" />
-        <result column="book_type_state" property="bookTypeState" jdbcType="INTEGER" />
+    <resultMap id="BookTypeMap" type="BookType">
+        <id column="book_type_id" property="bookTypeId" jdbcType="INTEGER"/>
+        <result column="book_type_name" property="bookTypeName" jdbcType="VARCHAR"/>
+        <result column="book_type_state" property="bookTypeState" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="select" resultMap="BookTypeMap" parameterType="integer">
@@ -34,37 +34,29 @@
 
     <update id="update" parameterType="BookType">
         update
-        book_type
-        set
-        book_type_name=#{bookTypeName}
-        where
-        book_type_id=#{bookTypeId}
+            book_type
+        set book_type_name=#{bookTypeName}
+        where book_type_id = #{bookTypeId}
     </update>
 
     <insert id="insert" parameterType="BookType">
-        insert into
-        book_type
-        values (
-        null,
-        #{bookTypeName},
-        1
-        )
+        insert into book_type
+        values (null,
+                #{bookTypeName},
+                1)
     </insert>
 
     <delete id="delete">
-        delete from
-        book_type
-        where
-        book_type_id=#{bookTypeId}
+        delete
+        from book_type
+        where book_type_id = #{bookTypeId}
     </delete>
 
     <update id="updateStatus">
         update
-        book_type
-        set
-        book_type_state=1-book_type_state
-        where
-        book_type_id=#{bookTypeId}
+            book_type
+        set book_type_state=1 - book_type_state
+        where book_type_id = #{bookTypeId}
     </update>
 
     <select id="selectByBookTypeState" resultMap="BookTypeMap">
@@ -76,4 +68,11 @@
         book_type_state=#{bookTypeState}
     </select>
 
+    <select id="selectByBookTypeName" resultMap="BookTypeMap">
+        select
+        <include refid="bookTypeColumn"/>
+        from book_type
+        where book_type_name = #{bookTypeName}
+
+    </select>
 </mapper>

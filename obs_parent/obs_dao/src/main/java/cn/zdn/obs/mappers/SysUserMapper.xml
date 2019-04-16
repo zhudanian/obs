@@ -14,14 +14,14 @@
         create_date
     </sql>
     <resultMap id="sysUserResultMap" type="SysUser">
-        <id column="sys_id" jdbcType="INTEGER" property="sysId" />
-        <result column="sys_name" jdbcType="VARCHAR" property="sysName" />
-        <result column="sys_login_name" jdbcType="VARCHAR" property="sysLoginName" />
-        <result column="sys_password" jdbcType="VARCHAR" property="sysPassword" />
-        <result column="sys_phone" jdbcType="VARCHAR" property="sysPhone" />
-        <result column="sys_email" jdbcType="VARCHAR" property="sysEmail" />
-        <result column="is_valid" jdbcType="INTEGER" property="isValid" />
-        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <id column="sys_id" jdbcType="INTEGER" property="sysId"/>
+        <result column="sys_name" jdbcType="VARCHAR" property="sysName"/>
+        <result column="sys_login_name" jdbcType="VARCHAR" property="sysLoginName"/>
+        <result column="sys_password" jdbcType="VARCHAR" property="sysPassword"/>
+        <result column="sys_phone" jdbcType="VARCHAR" property="sysPhone"/>
+        <result column="sys_email" jdbcType="VARCHAR" property="sysEmail"/>
+        <result column="is_valid" jdbcType="INTEGER" property="isValid"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
     </resultMap>
     <select id="select" resultMap="sysUserResultMap">
         select
@@ -32,7 +32,7 @@
         sys_id=#{sysId}
     </select>
 
-    <select id="selectBySysLoginNameAndSysPassword" resultType="SysUser">
+    <select id="selectBySysLoginNameAndSysPassword" resultMap="sysUserResultMap">
         select
         <include refid="sysUserColumn"/>
         from
@@ -52,48 +52,56 @@
         sys_user
     </select>
 
+    <select id="selectBySysLoginNameAndSysId" resultMap="sysUserResultMap">
+        select sys_login_name, sys_id
+        from sys_user
+        <where>
+            <if test="sysLoginName != null">
+                and sys_login_name = #{sysLoginName,jdbcType=VARCHAR}
+            </if>
+            <if test="sysId != null">
+                and sys_id &lt;&gt; #{sysId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
     <update id="update">
         update
-        sys_user
-        set
-        sys_name=#{sysName},
-        sys_login_name=#{sysLoginName},
-        sys_phone=#{sysPhone},
-        sys_email=#{sysEmail},
-        is_valid=1-is_valid
-        where
-        sys_id=#{sys_Id}
+            sys_user
+        set sys_name=#{sysName},
+            sys_login_name=#{sysLoginName},
+            sys_phone=#{sysPhone},
+            sys_email=#{sysEmail}
+        where sys_id = #{sysId}
     </update>
 
     <insert id="insert">
-        insert into
-        sys_user
+        insert into sys_user
         values (
-        #{sysName},
-        #{sysLoginName},
-        #{sysPassword},
-        #{sysPhone},
-        #{sysEmail},
-        #{isValid}
-               )
+                null,
+                #{sysName},
+                #{sysLoginName},
+                #{sysPassword},
+                #{sysPhone},
+                #{sysEmail},
+                1,
+                now()
+                )
 
     </insert>
 
     <update id="updateStatus">
         update
-        sys_user
-        set
-        is_valid=1-is_valid
-        where
-        sys_id=1-sys_id
+            sys_user
+        set is_valid=1 - is_valid
+        where sys_id = #{sysId}
     </update>
 
 
     <delete id="delete">
-        delete from
-        sys_user
-        where
-        sys_id=#{sysId}
+        delete
+        from sys_user
+        where sys_id = #{sysId}
     </delete>
 
 </mapper>

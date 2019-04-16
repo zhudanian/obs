@@ -13,11 +13,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/msg.css">
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
-    <script src="${pageContext.request.contextPath}/js/zshop.js"></script>
+    <script src="${pageContext.request.contextPath}/js/obs.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
 </head>
 <body>
 
-
+<jsp:include page="top.jsp"/>
 <div class="container">
     <!-- content start -->
     <div class="container">
@@ -133,6 +134,6 @@
     </div>
     <!-- content end-->
 </div>
-
+<jsp:include page="bottom.jsp"/>
 </body>
 </html>

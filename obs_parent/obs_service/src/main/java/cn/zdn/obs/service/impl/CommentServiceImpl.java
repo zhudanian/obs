@@ -17,19 +17,19 @@ public class CommentServiceImpl implements CommentService {
     private CommentDao commentDao;
 
     @Override
+    public List<Comment> queryAll(Integer customerId) {
+        return commentDao.selectAll(customerId);
+    }
+
+   /* @Override
+    public Integer add(Comment comment) {
+        return commentDao.insert(comment);
+    }
+
+    @Override
     public Comment queryByCommentId(Integer commentId) {
 
         return commentDao.select(commentId);
-    }
-
-    @Override
-    public List<Comment> queryAll() {
-        return commentDao.selectAll();
-    }
-
-    @Override
-    public Integer add(Comment comment) {
-        return commentDao.insert(comment);
     }
 
     @Override
@@ -40,5 +40,5 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Integer remove(Integer commentId) {
         return commentDao.delete(commentId);
-    }
+    }*/
 }

@@ -19,6 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/backend/orderManager")
 public class OrderController {
+
     @Autowired
     private OrderService orderService;
 
@@ -31,19 +32,25 @@ public class OrderController {
         List<Order> orders = orderService.queryAll();
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         model.addAttribute("order", pageInfo);
+        System.out.println(orders);
         return "orderManager";
     }
 
+    @RequestMapping("/changeOrderState")
+    @ResponseBody
+    public void changeOrderState(Integer orderId){
+        orderService.changeOrderState(orderId);
+    }
 
-    //按Id查询：显示修改和编辑
+ /*   //按Id查询：显示修改和编辑
     @RequestMapping("/queryByOrderId")
     @ResponseBody
     public ResponseResult queryByOrderId(Integer orderId) {
         Order order = orderService.queryByOrderId(orderId);
         return ResponseResult.success(order);
-    }
+    }*/
 
-    //修改
+   /* //修改
     @RequestMapping("/modify")
     @ResponseBody
     public ResponseResult modify(Order order) {
@@ -54,9 +61,9 @@ public class OrderController {
             return ResponseResult.fail("添加失败!");
         }
 
-    }
+    }*/
 
-    //删除书籍
+  /*  //删除书籍
     @RequestMapping("/removeByBookId")
     @ResponseBody
     public ResponseResult removeByOrderId(Integer orderId) {
@@ -66,9 +73,9 @@ public class OrderController {
         } else {
             return ResponseResult.fail("删除失败!");
         }
-    }
+    }*/
 
-    //提交订单
+   /* //提交订单
     @RequestMapping("/confirmOrder")
     @ResponseBody
     public ResponseResult confirmOrder(Order order) {
@@ -79,5 +86,5 @@ public class OrderController {
             return ResponseResult.fail("添加失败!");
         }
     }
-
+*/
 }

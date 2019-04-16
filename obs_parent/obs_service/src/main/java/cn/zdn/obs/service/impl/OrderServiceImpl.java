@@ -18,24 +18,27 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Override
-    public Order queryByOrderId(Integer orderId) {
-        return orderDao.select(orderId);
+    public List<Order> queryAll() {
+        System.out.println(orderDao.selectAll());
+        return orderDao.selectAll();
     }
 
     @Override
-    public List<Order> queryAll() {
-        return orderDao.selectAll();
+    public void changeOrderState(Integer orderId) {
+        orderDao.updateOrderState(orderId);
+
+    }
+
+
+  /*  @Override
+    public Order queryByOrderId(Integer orderId) {
+        return orderDao.selectByOrderId(orderId);
     }
 
     @Override
     public Integer add(Order order) {
 
         return orderDao.insert(order);
-    }
-
-    @Override
-    public List<Order> queryByCustomerId(Integer customerId) {
-        return null;
     }
 
     @Override
@@ -46,5 +49,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer remove(Integer orderId) {
         return orderDao.delete(orderId);
+    }*/
+
+    @Override
+    public List<Order> queryByCustomerId(Integer customerId) {
+        return null;
     }
+
+
 }

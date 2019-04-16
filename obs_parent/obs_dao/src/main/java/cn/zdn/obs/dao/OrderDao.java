@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderDao{
 
-    Order select(Integer orderId);
+    Order selectByOrderId(Integer orderId);
 
     List<Order> selectAll();
 
@@ -18,6 +18,5 @@ public interface OrderDao{
     Integer delete(Integer orderId);
 
 
-
-
+    void updateOrderState(Integer orderId);
 }

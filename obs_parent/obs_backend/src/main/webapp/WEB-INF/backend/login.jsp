@@ -79,8 +79,8 @@
     <div class="panel panel-primary div-shadow">
         <!-- h3标签加载自定义样式，完成文字居中和上下间距调整 -->
         <div class="panel-heading">
-            <h3>在线商城系统 3.0</h3>
-            <span>ZSHOP Manager System</span>
+            <h3>网上书城系统 1.0</h3>
+            <span>Online Bookstore Manager System</span>
         </div>
         <div class="panel-body">
             <!-- login form start -->
@@ -129,14 +129,6 @@
             </form>
             <!-- login form end -->
         </div>
-    </div>
-</div>
-<!-- 页尾 版权声明 -->
-<div class="container">
-    <div class="col-sm-12 foot-css">
-        <p class="text-muted credit">
-            Copyright 中兴软件技术
-        </p>
     </div>
 </div>
 

@@ -13,7 +13,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/backend/bookTypeManager")
@@ -22,12 +24,12 @@ public class BookTypeController {
     private BookTypeService bookTypeService;
 
     @RequestMapping("/queryAll")
-    public String queryAll( Model model, Integer pageNum) {
+    public String queryAll(Model model, Integer pageNum) {
 
         if (ObjectUtils.isEmpty(pageNum)) {
             pageNum = Constant.PAGE_NUM;
         }
-        PageHelper.startPage(pageNum,Constant.PAGE_SIZE);
+        PageHelper.startPage(pageNum, Constant.PAGE_SIZE);
         List<BookType> bookTypes = bookTypeService.queryAll();
         PageInfo<BookType> pageInfo = new PageInfo<>(bookTypes);
         model.addAttribute("bookType", pageInfo);
@@ -44,12 +46,40 @@ public class BookTypeController {
         return ResponseResult.success(bookType);
     }
 
-    //修改
+    //修改类型状态
+
+    @RequestMapping("/modifyStatus")
+    @ResponseBody
+    public ResponseResult modifyStatus(Integer id) {
+        Integer res = bookTypeService.modifyStatus(id);
+        if (res > 0) {
+            return ResponseResult.success("修改成功！");
+        } else {
+            return ResponseResult.fail("修改失败!");
+        }
+
+    }
+
+    //添加书籍类型
+
+    /*  //删除书籍类型
+      @RequestMapping("/removeByBookTypeId")
+      @ResponseBody
+      public ResponseResult removeByBookTypeId(Integer bookTypeId) {
+          Integer res = bookTypeService.remove(bookTypeId);
+          if (res > 0) {
+              return ResponseResult.success("删除成功！");
+          } else {
+              return ResponseResult.fail("删除失败!");
+          }
+      }*/
+
+    //修改类型名称
     @RequestMapping("/modify")
     @ResponseBody
     public ResponseResult modify(BookType bookType) {
         Integer res = bookTypeService.modify(bookType);
-        if (res > 0) {
+        if (res == 1) {
             return ResponseResult.success("修改成功！");
         } else {
             return ResponseResult.fail("修改失败!");
@@ -57,45 +87,33 @@ public class BookTypeController {
 
     }
 
-    //修改
-    @RequestMapping("/modifyStatus")
-    @ResponseBody
-    public ResponseResult modifyStatus(Integer bookTypeId) {
-        Integer res = bookTypeService.modifyStatus(bookTypeId);
-        if (res > 0) {
-            return ResponseResult.success("修改成功！");
-        } else {
-            return ResponseResult.fail("修改失败!");
-        }
-
-    }
-
-    //删除书籍
-    @RequestMapping("/removeByBookTypeId")
-    @ResponseBody
-    public ResponseResult removeByBookTypeId(Integer bookTypeId) {
-        Integer res = bookTypeService.remove(bookTypeId);
-        if (res > 0) {
-            return ResponseResult.success("删除成功！");
-        } else {
-            return ResponseResult.fail("删除失败!");
-        }
-    }
-
-    //添加书籍
     @RequestMapping("/add")
     @ResponseBody
     public ResponseResult add(BookType bookType) {
-        ResponseResult responseResult = new ResponseResult();
         Integer res = bookTypeService.add(bookType);
-        if (res > 0) {
-            responseResult.setStatus(Constant.RESPONSE_STATUS_SUCCESS);
-            responseResult.setMessage("添加成功！");
+        if (res == 1) {
+            return ResponseResult.success("添加成功");
         } else {
-            responseResult.setStatus(Constant.RESPONSE_STATUS_FAILURE);
-            responseResult.setMessage("添加失败！");
+            return ResponseResult.fail("添加失败");
+
         }
-        return responseResult;
     }
 
+    @RequestMapping("/checkBookTypeName")
+    @ResponseBody
+    //自动将被校验的值注入
+    public Map<String, Object> checkBookTypeName(String bookTypeName) {
+
+        Map<String, Object> map = new HashMap<>();
+        boolean res = bookTypeService.checkBookTypeName(bookTypeName);
+        //如果不存在该标题，可用
+        if (res) {
+            map.put("valid", true);
+        } else {
+            map.put("valid", false);
+            map.put("message", "书籍类型【" + bookTypeName + "】已经存在");
+        }
+        return map;
+
+    }
 }

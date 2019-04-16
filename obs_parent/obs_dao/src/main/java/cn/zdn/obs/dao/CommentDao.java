@@ -5,11 +5,17 @@ import cn.zdn.obs.model.Comment;
 
 import java.util.List;
 
-public interface CommentDao{
+public interface CommentDao {
 
-    Comment select(Integer commentId);
+    //后台
+    List<Comment> selectAll(Integer customerId);
 
-    List<Comment> selectAll();
+    String selectUserResponse(Integer commentId);
+
+    Integer updateUserResponse(String userResponse);
+
+    //前台
+    Comment selectByCustomerId(Integer commentId);
 
     Integer insert(Comment comment);
 

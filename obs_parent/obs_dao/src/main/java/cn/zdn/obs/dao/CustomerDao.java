@@ -19,4 +19,6 @@ public interface CustomerDao {
     Integer delete(Integer customerId);
 
     Customer selectCustomerByNameAndPassword(@Param("customerName") String customerName, @Param("customerPassword")String customerPassword);
+
+    Customer selectCustomerByCustomerName(String customerName);
 }

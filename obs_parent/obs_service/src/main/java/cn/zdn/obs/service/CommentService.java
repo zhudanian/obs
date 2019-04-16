@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface CommentService {
 
-    List<Comment> queryAll();
+    List<Comment> queryAll(Integer customerId);
 
-    Integer add(Comment comment);
+   /* Integer add(Comment comment);
 
     Integer remove(Integer commentId);
 
     Comment queryByCommentId(Integer commentId);
 
-    Integer modify(Comment comment);
+    Integer modify(Comment comment);*/
 }

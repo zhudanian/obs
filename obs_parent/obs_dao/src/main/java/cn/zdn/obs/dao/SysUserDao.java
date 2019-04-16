@@ -18,9 +18,11 @@ public interface SysUserDao {
 
     SysUser select(Integer sysId);
 
-    Integer update(int id,SysUser sysUser);
+    Integer update(SysUser sysUser);
 
     Integer updateStatus(Integer sysId);
 
     Integer delete(Integer sysId);
+
+    SysUser selectBySysLoginNameAndSysId(@Param("sysLoginName")String sysLoginName, @Param("sysId") Integer sysId);
 }
