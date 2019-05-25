@@ -1,18 +1,20 @@
 package cn.zdn.obs.front.controller;
 
+import cn.zdn.obs.cart.BookCart;
 import cn.zdn.obs.constants.ResponseResult;
 import cn.zdn.obs.exceptions.CustomerNotExistException;
-import cn.zdn.obs.exceptions.SysuserNotExistException;
-import cn.zdn.obs.front.vo.CustomerVO;
+
+import cn.zdn.obs.front.cart.BookCartUtils;
+import cn.zdn.obs.model.BookCartItem;
 import cn.zdn.obs.model.Contact;
 import cn.zdn.obs.model.Customer;
+import cn.zdn.obs.service.BookCartService;
 import cn.zdn.obs.service.ContactService;
 import cn.zdn.obs.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -31,6 +35,9 @@ public class CustomerController {
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private BookCartService bookCartService;
 
     @RequestMapping("toMyCenter")
     public String myCenter(HttpSession httpSession, Model model) {
@@ -74,8 +81,17 @@ public class CustomerController {
     public String login(String customerName, String customerPassword, HttpSession session, Model model) throws CustomerNotExistException {
         try {
             Customer customer = customerService.queryCustomerByNameAndPassword(customerName, customerPassword);
+            List<BookCartItem> bookCartItem = bookCartService.queryCartByCustomerId(customer.getCustomerId());
+            Map<Integer, BookCartItem> books = bookCartItem.stream().collect(Collectors.toMap(BookCartItem::getBookCartItemId, Function.identity(), (key1, key2) -> key2));
+            System.out.println(books);
+            BookCart bookCart = new BookCart();
+            bookCart.setBooks(books);
+
             //将该sysuser存入session作用域
             session.setAttribute("customer", customer);
+            session.setAttribute("bookCart", bookCart);
+
+            System.out.println( ((BookCart)session.getAttribute("bookCart")).getItems());
 
             return "forward:/front/bookstore/showBookstore";
 
@@ -89,6 +105,8 @@ public class CustomerController {
 
     @RequestMapping("/logout")
     public String logout(HttpSession httpSession) {
+        BookCart bookCart = (BookCart) httpSession.getAttribute("bookCart");
+        bookCartService.addToDB(bookCart);
         httpSession.invalidate();
 
         return "forward:/front/bookstore/showBookstore";
@@ -113,8 +131,8 @@ public class CustomerController {
     //修改账号信息
     @RequestMapping("/modifyBaseInfo")
     @ResponseBody
-    public ResponseResult modifyBaseInfo(Customer customer,HttpSession httpSession) {
-        customer.setCustomerId (((Customer)httpSession.getAttribute("customer")).getCustomerId());
+    public ResponseResult modifyBaseInfo(Customer customer, HttpSession httpSession) {
+        customer.setCustomerId(((Customer) httpSession.getAttribute("customer")).getCustomerId());
         System.out.println(customer);
         Integer res = customerService.modify(customer);
         if (res == 1) {

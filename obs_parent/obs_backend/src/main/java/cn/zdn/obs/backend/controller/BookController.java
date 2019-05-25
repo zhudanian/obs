@@ -71,6 +71,7 @@ public class BookController {
     //按条件查询书籍
     @RequestMapping("/queryByBookParam")
     public String queryByBookParam(BookParam bookParam, Integer pageNum, Model model) {
+        System.out.println(bookParam);
         if (ObjectUtils.isEmpty(pageNum)) {
             pageNum = Constant.PAGE_NUM;
         }
@@ -78,6 +79,7 @@ public class BookController {
         List<Book> books = bookService.queryByBookParam(bookParam);
         PageInfo<Book> pageInfo = new PageInfo<>(books);
         model.addAttribute("book", pageInfo);
+        System.out.println(books);
         return "bookManager";
     }
 

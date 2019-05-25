@@ -1,6 +1,5 @@
 package cn.zdn.obs.service.impl;
 
-import cn.zdn.obs.cart.ShoppingCart;
 import cn.zdn.obs.dao.BookDao;
 import cn.zdn.obs.dto.BookDto;
 import cn.zdn.obs.exceptions.FileUploadException;
@@ -92,7 +91,6 @@ public class BookServiceImpl implements BookService {
         String fileName = StringUtils.renameFileName(bookDto.getFileName());
         //String filePath = bookDto.getUploadPath() + "\\" + fileName;
 
-        //获取ftp服务器上的二级目录
         String picSavePath ="/images";
 
 
@@ -114,8 +112,6 @@ public class BookServiceImpl implements BookService {
             BookType bookType = new BookType();
             bookType.setBookTypeId(bookDto.getBookTypeId());
             book.setBookType(bookType);
-            book.setOnSaleTime(new Date());
-            System.out.println(book);
             bookDao.insert(book);
 
 

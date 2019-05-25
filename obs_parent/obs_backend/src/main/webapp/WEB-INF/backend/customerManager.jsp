@@ -23,23 +23,23 @@
 
     <script>
 
-        //显示客户详情模态框
-        function showCustomerModal(customerId) {
-            alert(customerId);
-            $.post(
-                '${pageContext.request.contextPath}/backend/customerManager/queryByCustomerId',
-                {'customerId': customerId},
-                function (responseResult) {
-                    //当查询成功，将查询出的记录写入到修改模态框对应的节点上
-                    $('#customerId_m').text(responseResult.obj.customerId);
-                    $('#customerName_m').text(responseResult.obj.customerName);
-                    $('#customerAddress_m').text(responseResult.obj.customerAddress);
-                    $('#customerPhone_m').text(responseResult.obj.customerPhone);
-                    $('#customerRegisterDate_m').text(jsonDateFormat(responseResult.obj.customerRegisterDate));
-                });
+    //显示客户详情模态框
+    function showCustomerModal(customerId) {
+        alert(customerId);
+        $.post(
+            '${pageContext.request.contextPath}/backend/customerManager/queryByCustomerId',
+            {'customerId': customerId},
+            function (responseResult) {
+                //当查询成功，将查询出的记录写入到修改模态框对应的节点上
+                $('#customerId_m').text(responseResult.obj.customerId);
+                $('#customerName_m').text(responseResult.obj.customerName);
+                $('#customerAddress_m').text(responseResult.obj.customerAddress);
+                $('#customerPhone_m').text(responseResult.obj.customerPhone);
+                $('#customerRegisterDate_m').text(jsonDateFormat(responseResult.obj.customerRegisterDate));
+            });
 
-            $('#showCustomerModal').modal('show');
-        }
+        $('#showCustomerModal').modal('show');
+    }
     </script>
 </head>
 
@@ -51,30 +51,34 @@
     <div class="panel-body">
         <div>
 
-            <form class="form-inline" method="post">
+            <form class="form-inline" method="post"
+                  action="${pageContext.request.contextPath}/backend/customerManager/queryByCustomerParam">
 
                 <div class="form-group">
                     <label for="customer_name">姓名:</label>
-                    <input type="text" class="form-control" id="customer_name" name="name" placeholder="请输入姓名"
+                    <input type="text" class="form-control" id="customer_name"
+                           name="customerName" placeholder="请输入姓名"
                            size="15px">
                 </div>
-                <div class="form-group">
-                    <label for="customer_loginName">帐号:</label>
-                    <input type="text" class="form-control" id="customer_loginName" name="loginName" placeholder="请输入帐号"
-                           size="15px">
-                </div>
+                <%--<div class="form-group">--%>
+                <%--<label for="customer_loginName">帐号:</label>--%>
+                <%--<input type="text" class="form-control" id="customer_loginName" name="loginName" placeholder="请输入帐号"--%>
+                <%--size="15px">--%>
+                <%--</div>--%>
                 <div class="form-group">
                     <label for="customer_phone">电话:</label>
-                    <input type="text" class="form-control" id="customer_phone" name="phone" placeholder="请输入电话"
+                    <input type="text" class="form-control" id="customer_phone"
+                           name="customerPhone" placeholder="请输入电话"
                            size="15px">
                 </div>
                 <div class="form-group">
                     <label for="customer_address">地址:</label>
-                    <input type="text" class="form-control" id="customer_address" name="address" placeholder="请输入地址">
+                    <input type="text" class="form-control" id="customer_address"
+                           name="customerAddress" placeholder="请输入地址">
                 </div>
 
-                <input type="button" value="查询" class="btn btn-primary" id="search">
-                <input type="reset" value="重置" class="btn btn-primary" id="doSearch">
+                <input type="submit" value="查询" class="btn btn-primary" id="search">
+                <%--<input type="reset" value="重置" class="btn btn-primary" id="doSearch">--%>
             </form>
         </div>
 

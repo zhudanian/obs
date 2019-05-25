@@ -289,36 +289,36 @@
         <h3 class="panel-title">系统用户管理</h3>
     </div>
     <div class="panel-body">
-        <div>
-            <form class="form-inline" method="post" id="frmQuery">
-                <input type="hidden" id="pageNum" name="pageNum" value="${data.pageNum}"/>
+        <%--<div>--%>
+            <%--<form class="form-inline" method="post" id="frmQuery">--%>
+                <%--<input type="hidden" id="pageNum" name="pageNum" value="${data.pageNum}"/>--%>
 
-                <div class="form-group">
-                    <label for="sysName_q">姓名:</label>
-                    <input type="text" class="form-control" id="sysName_q" placeholder="请输入姓名" name="sysName"
-                           value="${sysUserParam.sysName}">
-                </div>
-                <div class="form-group">
-                    <label for="sysLoginName_q">帐号:</label>
-                    <input type="text" class="form-control" id="sysLoginName_q" placeholder="请输入帐号" name="sysLoginName"
-                           value="${sysUserParam.sysLoginName}">
-                </div>
-                <div class="form-group">
-                    <label for="sysPhone_q">电话:</label>
-                    <input type="text" class="form-control" id="sysPhone_q" placeholder="请输入电话" name="sysPhone"
-                           value="${sysUserParam.sysPhone}">
-                </div>
-                <div class="form-group">
-                    <label for="status_q">状态</label>
-                    <select class="form-control" name="isValid" id="status_q">
-                        <option value="-1">全部</option>
-                        <option value="1" <c:if test="${sysUserParam.isValid==1}">selected</c:if>>---有效---</option>
-                        <option value="0" <c:if test="${sysUserParam.isValid==0}">selected</c:if>>---无效---</option>
-                    </select>
-                </div>
-                <input type="submit" value="查询" class="btn btn-primary" id="searchSysUser">
-            </form>
-        </div>
+                <%--<div class="form-group">--%>
+                    <%--<label for="sysName_q">姓名:</label>--%>
+                    <%--<input type="text" class="form-control" id="sysName_q" placeholder="请输入姓名" name="sysName"--%>
+                           <%--value="${sysUserParam.sysName}">--%>
+                <%--</div>--%>
+                <%--<div class="form-group">--%>
+                    <%--<label for="sysLoginName_q">帐号:</label>--%>
+                    <%--<input type="text" class="form-control" id="sysLoginName_q" placeholder="请输入帐号" name="sysLoginName"--%>
+                           <%--value="${sysUserParam.sysLoginName}">--%>
+                <%--</div>--%>
+                <%--<div class="form-group">--%>
+                    <%--<label for="sysPhone_q">电话:</label>--%>
+                    <%--<input type="text" class="form-control" id="sysPhone_q" placeholder="请输入电话" name="sysPhone"--%>
+                           <%--value="${sysUserParam.sysPhone}">--%>
+                <%--</div>--%>
+                <%--<div class="form-group">--%>
+                    <%--<label for="status_q">状态</label>--%>
+                    <%--<select class="form-control" name="isValid" id="status_q">--%>
+                        <%--<option value="-1">全部</option>--%>
+                        <%--<option value="1" <c:if test="${sysUserParam.isValid==1}">selected</c:if>>---有效---</option>--%>
+                        <%--<option value="0" <c:if test="${sysUserParam.isValid==0}">selected</c:if>>---无效---</option>--%>
+                    <%--</select>--%>
+                <%--</div>--%>
+                <%--<input type="submit" value="查询" class="btn btn-primary" id="searchSysUser">--%>
+            <%--</form>--%>
+        <%--</div>--%>
         <br>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSysUserModal">添加系统用户
         </button>

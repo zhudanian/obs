@@ -27,6 +27,4 @@ public class Order implements Serializable {
     //订单对订单明细：一对多
     private List<OrderBook> orderBookList;
 
-
-
 }

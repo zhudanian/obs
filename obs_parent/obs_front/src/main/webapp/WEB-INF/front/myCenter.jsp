@@ -177,9 +177,9 @@
             <li onclick="showModifyCustomerBaseInfo()" style="cursor: pointer;padding: 20px;font-size: large">
                 修改资料
             </li>
-            <li style="cursor: pointer;padding: 20px;font-size: large">
-                充值会员
-            </li>
+            <%--<li style="cursor: pointer;padding: 20px;font-size: large">--%>
+                <%--充值会员--%>
+            <%--</li>--%>
         </ul>
     </div>
     <div class="col-lg-8">
@@ -218,6 +218,7 @@
                     </div>
                 </form>
             </div>
+
             <div>
                 <div class="row">
                     <div class="col-xs-12">

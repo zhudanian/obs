@@ -134,4 +134,26 @@
         where
         customer_name=#{customerName}
     </select>
+
+
+    <select id="selectByCustomerParam" parameterType="cn.zdn.obs.params.CustomerParam" resultMap="customerResultMap1">
+        select
+        <include refid="customerColumn"/>
+        from customer
+        <where>
+
+            <if test="customerName!=null and customerName!=''">
+                and customer.customer_name like concat(concat('%',#{customerName}),'%')
+            </if>
+            <if test="customerPhone!=null and customerPhone!=''">
+                and customer.customer_phone like concat(concat('%',#{customerPhone}),'%')
+            </if>
+            <if test="customerAddress!=null and customerAddress!=''">
+                and customer.customer_address like concat(concat('%',#{customerAddress}),'%')
+            </if>
+
+        </where>
+
+    </select>
+
 </mapper>

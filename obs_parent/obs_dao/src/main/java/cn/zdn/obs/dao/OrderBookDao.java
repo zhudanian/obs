@@ -4,6 +4,7 @@ package cn.zdn.obs.dao;
 import cn.zdn.obs.model.OrderBook;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderBookDao{
 
@@ -12,6 +13,7 @@ public interface OrderBookDao{
 
     List<OrderBook> selectByOrderId(Integer orderBookId);
 
+    List<Map<String, OrderBook>> selectByOrderId1(Integer orderBookId);
     //Integer insert(OrderBook orderBook);
 
     Integer update(OrderBook orderBook);

@@ -2,6 +2,7 @@ package cn.zdn.obs.service;
 
 import cn.zdn.obs.exceptions.CustomerNotExistException;
 import cn.zdn.obs.model.Customer;
+import cn.zdn.obs.params.CustomerParam;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CustomerService {
     Customer queryCustomerByNameAndPassword(String customerName, String customerPassword) throws CustomerNotExistException;
 
     boolean checkCustomerName(String customerName);
+
+    List<Customer> queryByCustomerParam(CustomerParam customerParam);
 }

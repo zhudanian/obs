@@ -1,9 +1,9 @@
 package cn.zdn.obs.front.controller;
 
-import cn.zdn.obs.cart.ShoppingCart;
+
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
-import cn.zdn.obs.front.cart.ShoppingCartUtils;
+
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.model.BookType;
 import cn.zdn.obs.params.BookParam;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +37,50 @@ public class BookStoreController {
     @Autowired
     private BookService bookService;
 
+
+    @RequestMapping("/queryByBookTypeId")
+    public String queryByBookTypeId(Integer bookTypeId,Model model,Integer pageNum) {
+
+        System.out.println(bookTypeId);
+        BookParam bookParam = new BookParam();
+        bookParam.setBookTypeId(bookTypeId);
+        BookType bookType = bookTypeService.queryByBookTypeId(bookTypeId);
+        model.addAttribute("bookType",bookType);
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum,8);
+
+        List<Book> bookList = bookService.queryByBookParam(bookParam);
+        PageInfo<Book> pageInfo = new PageInfo<>(bookList);
+        model.addAttribute("bookList",pageInfo);
+        return "booksByBookType";
+    }
+
+    @RequestMapping("/queryByHot")
+    public String queryByHot(Model model,Integer pageNum){
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum, 8);
+        List<Book> hotBooks = bookService.queryByHot();
+        PageInfo<Book> pageInfo = new PageInfo<>(hotBooks);
+        model.addAttribute("bookList",pageInfo);
+        return "hotBooks";
+    }
+
+    @RequestMapping("/queryByNew")
+    public String queryByNew(Model model,Integer pageNum){
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum, 8);
+        List<Book> newBooks = bookService.queryNewBook();
+        PageInfo<Book> pageInfo = new PageInfo<>(newBooks);
+        model.addAttribute("bookList", pageInfo);
+        return "newBooks";
+    }
+
     @RequestMapping("/showBookstore")
     public String showBookstore(Model model) {
         List<Book> hotBooks = bookService.queryByHot();
@@ -46,6 +90,7 @@ public class BookStoreController {
         return "bookstore";
     }
 
+
     //sideBar
     @ModelAttribute("bookTypeList")
     public List<BookType> queryEnable() {
@@ -53,9 +98,6 @@ public class BookStoreController {
         // System.out.println(bookTypeList);
         return bookTypeList;
     }
-
-
-
 
     //按Id查询：显示修改和编辑
     @RequestMapping("/queryByBookId")
@@ -65,7 +107,7 @@ public class BookStoreController {
         return ResponseResult.success(book);
     }
 
-    @RequestMapping("queryByInput")
+    @RequestMapping("/queryByInput")
     public List<Book> queryByInput(String inputString) {
         List<Book> bookList = bookService.queryByInput(inputString);
         //System.out.println(bookList);

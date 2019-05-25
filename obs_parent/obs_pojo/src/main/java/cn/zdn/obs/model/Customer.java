@@ -19,8 +19,8 @@ public class Customer implements Serializable {
     //人对订单、地址、评论 ：一对多
     //购物车 ：一对一
     private List<Order> orderList;
+
     private List<Contact> contactList;
-    private List<Cart> cartList;
     private List<Comment> commentList;
 
 

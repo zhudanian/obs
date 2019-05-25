@@ -77,16 +77,22 @@
 
     <insert id="insert">
         insert into sys_user
-        values (
-                null,
+        (sys_id,
+         sys_name,
+         sys_login_name,
+         sys_password,
+         sys_phone,
+         sys_email,
+         create_date,
+         is_valid)
+        values (null,
                 #{sysName},
                 #{sysLoginName},
                 #{sysPassword},
                 #{sysPhone},
                 #{sysEmail},
-                1,
-                now()
-                )
+                now(),
+                1)
 
     </insert>
 

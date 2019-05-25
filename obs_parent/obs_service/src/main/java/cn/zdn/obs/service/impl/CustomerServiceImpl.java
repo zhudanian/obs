@@ -5,6 +5,7 @@ import cn.zdn.obs.dao.CustomerDao;
 import cn.zdn.obs.exceptions.CustomerNotExistException;
 import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.model.Customer;
+import cn.zdn.obs.params.CustomerParam;
 import cn.zdn.obs.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,11 @@ public class CustomerServiceImpl implements CustomerService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<Customer> queryByCustomerParam(CustomerParam customerParam) {
+        return customerDao.selectByCustomerParam(customerParam);
     }
 
     @Override

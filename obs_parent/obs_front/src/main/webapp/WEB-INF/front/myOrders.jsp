@@ -29,107 +29,53 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover   orderDetail">
-            <tr>
-                <td colspan="5">
-                    <span>订单编号：<a href="orderDetail.html">4722456552315</a></span>
-                    <span>成交时间：2017-01-01  11:58:49</span>
-                </td>
-            </tr>
-            <tr>
-                <td><img src="images/shop1.jpg" alt=""></td>
-                <td class="order-content">
-                    <p>
-                        秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                    </p>
-                    <p>颜色：单件粉色上衣</p>
-                    <p>尺码：s</p>
-                </td>
-                <td>
-                    ￥180.00
-                </td>
-                <td>
-                    2
-                </td>
-                <td class="text-color">
-                    ￥360.00
-                </td>
-            </tr>
-            <tr>
-                <td><img src="images/shop2.jpg" alt=""></td>
-                <td class="order-content">
-                    <p>
-                        秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                    </p>
-                    <p>颜色：单件粉色上衣</p>
-                    <p>尺码：s</p>
-                </td>
-                <td>
-                    ￥60.00
-                </td>
-                <td>
-                    2
-                </td>
-                <td class="text-color">
-                    ￥60.00
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5">
-                    <span class="pull-right"><button class="btn btn-danger">删除订单</button></span>
-                    <span class="">总计:<span class="text-color">￥420.00</span></span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5">
-                    <span>订单编号：<a href="orderDetail.html">4722456552315</a></span>
-                    <span>成交时间：2017-01-01  11:58:49</span>
-                </td>
-            </tr>
-            <tr>
-                <td><img src="images/shop1.jpg" alt=""></td>
-                <td class="order-content">
-                    <p>
-                        秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                    </p>
-                    <p>颜色：单件粉色上衣</p>
-                    <p>尺码：s</p>
-                </td>
-                <td>
-                    ￥180.00
-                </td>
-                <td>
-                    2
-                </td>
-                <td class="text-color">
-                    ￥360.00
-                </td>
-            </tr>
-            <tr>
-                <td><img src="images/shop2.jpg" alt=""></td>
-                <td class="order-content">
-                    <p>
-                        秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                    </p>
-                    <p>颜色：单件粉色上衣</p>
-                    <p>尺码：s</p>
-                </td>
-                <td>
-                    ￥60.00
-                </td>
-                <td>
-                    2
-                </td>
-                <td class="text-color">
-                    ￥60.00
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5">
-                    <span class="pull-right"><button class="btn btn-danger">删除订单</button></span>
-                    <span class="">总计:<span class="text-color">￥420.00</span></span>
-                </td>
-            </tr>
+        <table class="table table-hover orderDetail">
+            <c:forEach items="${orderList.list}" var="order">
+                <tr>
+                    <td colspan="5">
+                        <span><b>订单编号：</b>${order.orderId}</span>&nbsp;&nbsp;
+                        <span><b>下单时间：</b>${order.confirmDate}</span>&nbsp;&nbsp;
+                        <span><b>收货人：</b>${order.contactName}</span>&nbsp;&nbsp;
+                        <span><b>电话：</b>${order.contactPhone}</span>&nbsp;&nbsp;
+                        <span><b>地址：</b>${order.contactAddress}</span>&nbsp;&nbsp;
+                        <span>
+                            <c:if test="${order.orderState==0}">待付款</c:if>
+                            <c:if test="${order.orderState==1}">未发货</c:if>
+                            <c:if test="${order.orderState==2}">已发货</c:if>
+                            <c:if test="${order.orderState==3}">已完成</c:if>
+                        </span>
+                    </td>
+                </tr>
+                <c:forEach items="${order.orderBookList}" var="orderBook">
+                    <tr>
+                        <td><img
+                                src="${pageContext.request.contextPath}/front/bookstore/showPic?image=${orderBook.book.bookImage}"
+                                style="width: 150px;"
+                                alt=""></td>
+                        <td class="order-content">
+                            <p><b>书名：《${orderBook.book.bookName}》</b></p>
+                            <p><b>作者： ${orderBook.book.bookAuthor}</b></p>
+                        </td>
+                        <td>
+                            单价：${orderBook.book.bookPrice}
+                        </td>
+                        <td>
+                            数量： ${orderBook.num}
+                        </td>
+                        <td class="text-color">
+                            小计：${orderBook.book.bookPrice*orderBook.num}
+                        </td>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td colspan="5">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="pull-right">总计:<span class="text-color">￥${order.totalPrice}</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </c:forEach>
+
+
         </table>
     </div>
     <!-- content end-->

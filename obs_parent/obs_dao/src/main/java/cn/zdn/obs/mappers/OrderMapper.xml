@@ -14,6 +14,7 @@
         contact_address
     </sql>
 
+
     <resultMap id="orderResultMap" type="Order">
         <id column="order_id" property="orderId" jdbcType="INTEGER"/>
         <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP"/>
@@ -24,6 +25,54 @@
         <result column="contact_address" property="contactAddress" jdbcType="VARCHAR"/>
     </resultMap>
 
+
+    <sql id="orderColumn1">
+        orders.order_id orderId,
+        orders.confirm_date confirmDate,
+        orders.order_state orderState,
+        orders.total_price totalPrice,
+        orders.contact_name contactName,
+        orders.contact_phone contactPhone,
+        orders.contact_address contactAddress,
+        order_book.id orderBookId,
+        order_book.num num,
+        book.book_id bookId,
+        book.book_name bookName,
+        book.book_image bookImage,
+        book.book_price bookPrice
+    </sql>
+
+    <resultMap id="orderResultMap1" type="Order">
+        <id column="orderId" property="orderId" jdbcType="INTEGER"/>
+        <result column="confirmDate" property="confirmDate" jdbcType="TIMESTAMP"/>
+        <result column="orderState" property="orderState" jdbcType="INTEGER"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DECIMAL"/>
+        <result column="contactName" property="contactName" jdbcType="VARCHAR"/>
+        <result column="contactPhone" property="contactPhone" jdbcType="VARCHAR"/>
+        <result column="contactAddress" property="contactAddress" jdbcType="VARCHAR"/>
+
+        <collection property="orderBookList" ofType="OrderBook">
+            <result column="orderBookId" property="id" jdbcType="INTEGER"/>
+            <result column="num" property="num" jdbcType="INTEGER"/>
+
+            <association property="book" javaType="Book">
+                <result column="bookId" property="bookId"/>
+                <result column="bookName" property="bookName"/>
+                <result column="bookImage" property="bookImage"/>
+                <result column="bookPrice" property="bookPrice"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="selectByCustomerId" resultMap="orderResultMap1">
+        select
+        <include refid="orderColumn1"/>
+        from orders,order_book,book
+        where
+        order_book.order_id=orders.order_id
+        and order_book.book_id=book.book_id
+        and customer_id=#{customerId}
+    </select>
     <!--后台-->
     <select id="selectAll" resultMap="orderResultMap">
         select
@@ -43,8 +92,8 @@
 
     <update id="updateOrderState">
         update orders
-        set order_state=order_state+1
-        where order_id=#{orderId}
+        set order_state=order_state + 1
+        where order_id = #{orderId}
     </update>
 
     <update id="update" parameterType="Order">
@@ -80,5 +129,7 @@
         from orders
         where order_id = #{orderId}
     </delete>
+
+
 
 </mapper>

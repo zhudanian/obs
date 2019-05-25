@@ -8,9 +8,16 @@ import java.util.List;
 @Data
 public class OrderBook implements Serializable {
 
-    private String id;
-    private String num;
-    //订单明细对书 ：一对多
-    private List<Book> bookList;
+    private Integer id;
+    private Integer num;
+    private Book book;
 
+    public OrderBook() {
+    }
+
+    public OrderBook(Integer id, Integer num, Book book) {
+        this.id = id;
+        this.num = num;
+        this.book = book;
+    }
 }

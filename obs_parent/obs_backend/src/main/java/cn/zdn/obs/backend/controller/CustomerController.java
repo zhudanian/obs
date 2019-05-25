@@ -3,6 +3,7 @@ package cn.zdn.obs.backend.controller;
 import cn.zdn.obs.constants.Constant;
 import cn.zdn.obs.constants.ResponseResult;
 import cn.zdn.obs.model.Customer;
+import cn.zdn.obs.params.CustomerParam;
 import cn.zdn.obs.service.CustomerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -56,4 +57,18 @@ public class CustomerController {
 
     }
 
+    //按条件查询书籍
+    @RequestMapping("/queryByCustomerParam")
+    public String CustomerParam(CustomerParam customerParam, Integer pageNum, Model model) {
+        System.out.println(customerParam);
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum, Constant.PAGE_SIZE);
+        List<Customer> customers = customerService.queryByCustomerParam(customerParam);
+        PageInfo<Customer> pageInfo = new PageInfo<>(customers);
+        model.addAttribute("customer", pageInfo);
+        System.out.println(customers);
+        return "customerManager";
+    }
 }

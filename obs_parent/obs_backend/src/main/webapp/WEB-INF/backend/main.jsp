@@ -79,9 +79,9 @@
                         <li class="list-group-item" name="userInfo" id="order-set">
                             <i class="glyphicon glyphicon-user"></i> &nbsp;订单管理
                         </li>
-                        <li class="list-group-item" name="userInfo" id="comment-set">
-                            <i class="glyphicon glyphicon-user"></i> &nbsp;订单评价管理
-                        </li>
+                        <%--<li class="list-group-item" name="userInfo" id="comment-set">--%>
+                            <%--<i class="glyphicon glyphicon-user"></i> &nbsp;订单评价管理--%>
+                        <%--</li>--%>
                         <li class="list-group-item" name="adminSet" id="manager-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-globe"></i> &nbsp;系统用户管理
                         </li>

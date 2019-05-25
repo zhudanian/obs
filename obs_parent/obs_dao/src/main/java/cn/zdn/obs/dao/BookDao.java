@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BookDao {
 
-    List<Book> selectByBookParam(@Param("bookParam") BookParam bookParam);
+    List<Book> selectByBookParam(BookParam bookParam);
 
     Book select(Integer bookId);
 

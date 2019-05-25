@@ -17,6 +17,7 @@ public interface OrderDao{
 
     Integer delete(Integer orderId);
 
-
     void updateOrderState(Integer orderId);
+
+    List<Order> selectByCustomerId(Integer customerId);
 }

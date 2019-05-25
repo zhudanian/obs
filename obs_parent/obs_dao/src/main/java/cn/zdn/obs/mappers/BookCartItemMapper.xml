@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zdn.obs.dao.BookCartDao">
+
+    <sql id="bookCartItemColumn">
+        book_cart_item.book_cart_item_id,
+        book_cart_item.num,
+        book_cart_item.customer_id,
+        book.book_id,
+        book.book_name,
+        book.book_author,
+        book.book_image,
+        book.book_press,
+        book.book_price,
+        book.book_description,
+        book.book_hot,
+        book.on_sale_time
+
+    </sql>
+    <resultMap id="bookCartItemResultMap" type="BookCartItem">
+        <id column="book_cart_item_id" property="bookCartItemId"/>
+        <result column="num" property="num"/>
+        <result column="customer_id" property="customerId"/>
+        <association property="book" javaType="Book">
+            <id column="book_id" property="bookId" jdbcType="INTEGER" />
+            <result column="book_name" property="bookName" jdbcType="VARCHAR" />
+            <result column="book_author" property="bookAuthor" jdbcType="VARCHAR" />
+            <result column="book_image" property="bookImage" jdbcType="VARCHAR" />
+            <result column="book_press" property="bookPress" jdbcType="VARCHAR" />
+            <result column="book_price" property="bookPrice" jdbcType="DECIMAL" />
+            <result column="book_description" property="bookDescription" jdbcType="VARCHAR" />
+            <result column="book_hot" property="bookHot" jdbcType="INTEGER" />
+            <result column="on_sale_time" property="onSaleTime" jdbcType="DATE" />
+        </association>
+
+    </resultMap>
+
+    <select id="selectCartByCustomerId" resultMap="bookCartItemResultMap">
+        select
+        <include refid="bookCartItemColumn"/>
+        from book_cart_item,book
+        where
+              book_cart_item.book_id=book.book_id
+              and book_cart_item.customer_id=#{customerId}
+    </select>
+</mapper>

@@ -20,6 +20,7 @@
         book_type.book_type_name,
         book_type.book_type_state
     </sql>
+
     <resultMap id="bookResultMap" type="Book">
         <id column="book_id" property="bookId" jdbcType="INTEGER" />
         <result column="book_name" property="bookName" jdbcType="VARCHAR" />
@@ -96,7 +97,7 @@
                 #{bookPrice},
                 #{bookType.bookTypeId},
                 #{bookDescription},
-                #{onSaleTime},
+                now(),
                 1
                )
     </insert>
@@ -108,31 +109,28 @@
             book_id=#{bookId}
     </delete>
 
-    <select id="selectByBookParam" parameterType="cn.zdn.obs.params.BookParam" resultType="Book">
+    <select id="selectByBookParam" parameterType="cn.zdn.obs.params.BookParam" resultMap="bookResultMap">
         select
         <include refid="bookColumn"/>
-        from
-        book
+        from book
+        inner join book_type
+        on book.book_type_id = book_type.book_type_id
         <where>
             <if test="bookName!=null and bookName!=''">
-                and book_name like concat(concat('%',#{bookName}),'%')
+                and book.book_name like concat(concat('%',#{bookName}),'%')
             </if>
-            <if test="minPrice!=null and maxPrice!=null">
-                and book_price between #{minPrice} and #{maxPrice}
+            <if test="bookAuthor!=null and bookAuthor!=''">
+                and book.book_author like concat(concat('%',#{bookAuthor}),'%')
             </if>
-            <if test="bookAuthor!=null and bookAuthor!=-1">
-                and book_name like concat(concat('%',#{bookAuthor}),'%')
+            <if test="bookPress!=null and bookPress!=''">
+                and book.book_press like concat(concat('%',#{bookPress}),'%')
             </if>
-            <if test="bookPress!=null and bookPress!=-1">
-                and book_press like concat(concat('%',#{bookPress}),'%')
+            <if test="bookTypeName!=null and bookTypeName!=''">
+                and book_type.book_type_name like concat(concat('%',#{bookTypeName}),'%')
             </if>
-            <if test="productTypeId!=null and productTypeId!=-1">
-                and book_type_id=#{bookTypeId}
+            <if test="bookTypeId!=null and bookTypeId!=-1">
+                and book_type.book_type_id=#{bookTypeId}
             </if>
-           <!-- <if test="bookHot!=null and productTypeId!=-1">
-                and book_hot=#{bookHot}
-            </if>-->
-
         </where>
 
     </select>
@@ -157,7 +155,7 @@
         on book.book_type_id = book_type.book_type_id
         where
         book_hot=1
-        limit 8
+        /*limit 8*/
     </select>
 
     <select id="selectNewBook" resultMap="bookResultMap">
@@ -168,7 +166,7 @@
         left join book_type
         on book.book_type_id = book_type.book_type_id
         order by on_sale_time desc
-        limit 4
+       /* limit 4*/
     </select>
 
     <select id="selectByInput" resultMap="bookResultMap">

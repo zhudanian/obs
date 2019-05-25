@@ -15,13 +15,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="obs_backend" target="1.7" />
-      <module name="obs_common" target="1.7" />
-      <module name="obs_dao" target="1.7" />
-      <module name="obs_front" target="1.7" />
-      <module name="obs_parent" target="1.7" />
-      <module name="obs_pojo" target="1.7" />
-      <module name="obs_service" target="1.7" />
+      <module name="obs_backend" target="1.8" />
+      <module name="obs_common" target="1.8" />
+      <module name="obs_dao" target="1.8" />
+      <module name="obs_front" target="1.8" />
+      <module name="obs_parent" target="1.8" />
+      <module name="obs_pojo" target="1.8" />
+      <module name="obs_service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

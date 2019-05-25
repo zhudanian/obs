@@ -23,64 +23,19 @@
 
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
     <script src="${pageContext.request.contextPath}/js/obs.js"></script>
-    <script>
-        $(function () {
-            $('.card').click(function () {
-                var bookId = $(this).children().val();
-                alert(bookId);
-                $.post(
-                    '${pageContext.request.contextPath}/front/bookstore/queryByBookId',
-                    {"bookId": bookId},
-                    function (responseResult) {
-                        $('#bookId_qid').val(responseResult.obj.bookId)
-                        $('#bookImage_qid').attr('src', '${pageContext.request.contextPath}/front/bookstore/showPic?image=' + responseResult.obj.bookImage);
-                        $('#bookName_qid').text(responseResult.obj.bookName);
-                        $('#bookPrice_qid').text(responseResult.obj.bookPrice);
-                        $('#bookDescription_qid').text(responseResult.obj.bookDescription)
-                    });
-                $('#bookDetail').modal('show');
-            });
-        });
 
+    <script>
 
         function queryByBookTypeId(bookTypeId) {
-            $.post(
-                '${pageContext.request.contextPath}/front/bookstore/queryByBookTypeId'
-            )
+            $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/bookstore/queryByBookTypeId?bookTypeId=" + bookTypeId);
+
         }
-
-        function addToCart(bookId) {
-            $.post(
-                '${pageContext.request.contextPath}/front/cart/addToCart',
-                {
-                    "bookId": bookId,
-                    "num":$('#num').val()
-                },
-                function (responseResult) {
-                    alert(1);
-                }
-            )
+        function queryByNew() {
+            $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/bookstore/queryByNew" );
         }
-
-        $(document).ready(function () {
-            //var temp = "none";
-
-            $("#${bookType.bookTypeName}类型的书").click(function () {
-                document.getElementById('booksByBookType').style.display = "block";
-            });
-
-            /* function openMatter(obj) {
-                 for (var i = 1; i < 12; i++) {
-                     if (i == obj) {
-                         temp = "block";
-                     } else {
-                         temp = "none";
-                     }
-                     document.getElementById("matter" + i).style.display = temp;
-
-                 }
-             }*/
-        })
+        function queryByHot() {
+            $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/bookstore/queryByHot" );
+        }
     </script>
 </head>
 <body>
@@ -90,7 +45,7 @@
 
     <div class="row bookstore-top">
         <!-- 轮播 -->
-        <div class="carousel slide col-lg-8" id="carousel-example-generic" data-ride="carousel">
+        <div class="carousel slide col-lg-12" id="carousel-example-generic" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -102,25 +57,22 @@
                 <div class="item active">
                     <img src="${pageContext.request.contextPath}/images/a.jpg" alt="...">
                     <div class="carousel-caption">
-                        <h3>新书上架!!!</h3>
-                        <h2>《哈利波特》</h2>
-                        <h1><a onclick="addToCart()">加入购物车!</a></h1>
+                       <%-- <h3>新书上架!!!</h3>
+                        <h2>《哈利波特》</h2>--%>
                     </div>
                 </div>
                 <div class="item">
-                    <img src="${pageContext.request.contextPath}/images/b.jpg" alt="...">
+                    <img  src="${pageContext.request.contextPath}/images/b.jpg" alt="...">
                     <div class="carousel-caption">
-                        <h3>新书上架!!!</h3>
-                        <h2>《哈利波特》</h2>
-                        <h1><a onclick="addToCart()">加入购物车!</a></h1>
+                      <%--  <h3>新书上架!!!</h3>
+                        <h2>《哈利波特》</h2>--%>
                     </div>
                 </div>
                 <div class="item">
                     <img src="${pageContext.request.contextPath}/images/g.jpg" alt="...">
                     <div class="carousel-caption">
-                        <h3>新书上架!!!</h3>
-                        <h2>《哈利波特》</h2>
-                        <h1><a onclick="addToCart()">加入购物车!</a></h1>
+                   <%--     <h3>新书上架!!!</h3>
+                        <h2>《哈利波特》</h2>--%>
                     </div>
                 </div>
             </div>
@@ -134,29 +86,19 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-        <!-- 轮播结束 -->
 
-        <div class="col-lg-4">
-            <div class="col col-lg-4 activities">
-                <div>
-                    <h1>全场免运费</h1>
-                </div>
-                <div>2</div>
-                <div>3</div>
-            </div>
-        </div>
-        <!-- 活动-->
     </div>
 
     <div class="row bookstore-center">
-        <div class="category-area col-lg-3">
+        <div class="category-area col-lg-2">
             <h3>书籍类型</h3>
             <div class="category-menu">
                 <nav class="menu">
                     <ul class="list-unstyled">
+                        <li><a onclick="queryByNew()">新书</a></li>
+                        <li><a onclick="queryByHot()">热销</a></li>
                         <c:forEach items="${bookTypeList}" var="bookType">
                             <li value="${bookType.bookTypeId}"
-                                id="${bookType.bookTypeName}类型的书"
                                 onclick="queryByBookTypeId(${bookType.bookTypeId})">
                                 <a>${bookType.bookTypeName}</a></li>
                         </c:forEach>
@@ -165,84 +107,12 @@
             </div>
         </div>
 
-        <div class="col-lg-9">
+        <iframe id="frame-id" class="col-lg-10"
+                src="${pageContext.request.contextPath}/front/bookstore/queryByHot"
+               height="3000px" frameborder="0" scrolling="no">
+              <%--  width="100%" height="100%" >--%>
+        </iframe>
 
-            <div style="margin-left: 30px" id="default">
-                <!--引入外部文件，即需要在右侧加载的内容-->
-                <jsp:include page="default.jsp"/>
-            </div>
-
-            <div id="booksByBookType" style="display: none">
-                <jsp:include page="booksByBookType.jsp"/>
-            </div>
-
-            <%-- <div style="margin-left: 30px">
-
-
-                 <div class="row">
-                     <h1>热销书籍</h1>
-                     <hr/>
-                 </div>
-
-                 <div class="row">
-                     <c:forEach items="${hotBooks}" var="hotBook">
-                         <div class="card col-lg-2">
-                             <input type="hidden" class="hbi" value="${hotBook.bookId}">
-                             <img class="card-img-top"
-                                  src="${pageContext.request.contextPath}/front/bookstore/showPic?image=${hotBook.bookImage}"
-                                  alt="${hotBook.bookImage}"
-                                  width="175px" height="200px">
-                             <div class="card-body">
-                                 <h4 class="card-title">《${hotBook.bookName}》</h4>
-                                 <label>作者 ：${hotBook.bookAuthor}</label>
-                                 <span class="user clearfix pull-right"
-                                       style="margin-top: 20px;font-size: large;color: #f8bf0f">
-                                     ￥${hotBook.bookPrice}
-                                 </span>
-                                     &lt;%&ndash;  <p class="card-text">${hotBook.bookDescription}</p>&ndash;%&gt;
-                                     &lt;%&ndash;  <div class="attention pull-right">
-                                           加入购物车 <i class="icon iconfont icon-gouwuche"></i>
-                                       </div>&ndash;%&gt;
-                             </div>
-                         </div>
-                     </c:forEach>
-                 </div>
-
-             </div>
-
-             <div style="margin-left: 30px">
-                 <div class="row">
-                     <h1>新书上市</h1>
-                     <hr/>
-                 </div>
-
-                 <div class="row">
-                     <c:forEach items="${newBooks}" var="newBook">
-                         <div class="card col-lg-2">
-                             <input type="hidden" value="${newBook.bookId}">
-                             <img class="card-img-top"
-                                  src="${pageContext.request.contextPath}/front/bookstore/showPic?image=${newBook.bookImage}"
-                                  width="175px" height="200px">
-                             <div class="card-body">
-
-                                 <h4 class="card-title">《${newBook.bookName}》</h4>
-                                 <label>作者 ：${newBook.bookAuthor}</label>
-                                 <span class="user clearfix pull-right"
-                                       style="margin-top: 20px;font-size: large;color: #f8bf0f">
-                                     ￥${newBook.bookPrice}
-                                 </span>
-
-                                     &lt;%&ndash;<p class="card-text">${newBook.bookDescription}</p>&ndash;%&gt;
-                                     &lt;%&ndash; <div class="attention pull-right">
-                                          加入购物车 <i class="icon iconfont icon-gouwuche"></i>
-                                      </div>&ndash;%&gt;
-                             </div>
-                         </div>
-                     </c:forEach>
-                 </div>
-             </div>
- --%>
-        </div>
 
     </div>
 
@@ -277,13 +147,13 @@
                                 <span class="col-lg-12" style="font-size: large;color: #f8bf0f">
                                      <h4>￥<label id="bookPrice_qid" name="bookPrice_qid"></label></h4>
                                 </span>
-                                <p class="col-lg-12" id="bookDescription_qid"></p>
+                                <p class="col-lg-12" id="bookDescription_qid" style="height:150px"></p>
                                 <div class="row">
                                     <span class="col-lg-6" style="float: left">
                                          <input type="number" value="1" name="num" id="num" style="width: 50px"/>
                                     </span>
                                     <span class="col-lg-6">
-                                          <button onclick="addToCart($('bookId_qid').val())">加入购物车</button>
+                                          <button onclick="addToCart($('#bookId_qid').val())">加入购物车</button>
                                     </span>
 
                                 </div>

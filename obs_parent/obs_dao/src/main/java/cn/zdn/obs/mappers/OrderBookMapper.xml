@@ -7,48 +7,61 @@
     <sql id="orderBookColumn">
         order_book.id,
         order_book.num,
+        book.book_id,
         book.book_name,
         book.book_image,
         book.book_price
     </sql>
 
     <resultMap id="orderBookResultMap" type="OrderBook">
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="num" property="num" jdbcType="INTEGER" />
-        <collection property="bookList" ofType="Book">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <association property="book" javaType="Book">
             <id column="book_id" property="bookId"/>
             <result column="book_name" property="bookName"/>
             <result column="book_image" property="bookImage"/>
             <result column="book_price" property="bookPrice"/>
-        </collection>
+        </association>
     </resultMap>
 
+    <!--  <resultMap id="orderBookResultMap1" type="OrderBook">
+          <id column="id" property="id" jdbcType="INTEGER" />
+          <result column="num" property="num" jdbcType="INTEGER" />
+          <association property="book" javaType="Book">
+              <id column="book_id" property="bookId"/>
+              <result column="book_name" property="bookName"/>
+              <result column="book_image" property="bookImage"/>
+              <result column="book_price" property="bookPrice"/>
+          </association>
+      </resultMap>-->
 
     <select id="selectByOrderId" resultMap="orderBookResultMap">
         select
         <include refid="orderBookColumn"/>
-        from
-        order_book,book
-        where
-        order_book.book_id=book.book_id
-        and
-        order_book.order_id=#{orderBookId}
+        from order_book,book
+        where order_book.book_id=book.book_id
+        and order_book.order_id=#{orderBookId}
+    </select>
+
+    <select id="selectByOrderId1" resultMap="orderBookResultMap">
+        select
+        <include refid="orderBookColumn"/>
+        from order_book,book
+        where order_book.book_id=book.book_id
+        and order_book.order_id=#{orderBookId}
     </select>
 
     <update id="update">
         update
-        order_book
-        set
-        num=#{num}
-        where
-        id=#{id}
+            order_book
+        set num=#{num}
+        where id = #{id}
     </update>
 
     <delete id="delete">
-        delete from
-        order_book
-        where
-        id=#{id}
+        delete
+        from order_book
+        where id = #{id}
     </delete>
 
 
