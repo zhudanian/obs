@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class Order implements Serializable {
 
-    private Integer orderId;
+    private String orderId;
     private Date confirmDate;
     private Integer orderState;
     private BigDecimal totalPrice;

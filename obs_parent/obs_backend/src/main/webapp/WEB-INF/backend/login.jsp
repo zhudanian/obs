@@ -69,8 +69,6 @@
 
         }
 
-
-
     </script>
 </head>
 <body>
@@ -121,9 +119,9 @@
                         <div class="col-sm-4">
                             <button type="reset" class="btn btn-primary btn-block">重&nbsp;&nbsp;置</button>
                         </div>
-                        <div class="col-sm-4">
-                            <button type="button" class="btn btn-link btn-block">忘记密码？</button>
-                        </div>
+                        <%--<div class="col-sm-4">--%>
+                            <%--<button type="button" class="btn btn-link btn-block">忘记密码？</button>--%>
+                        <%--</div>--%>
                     </div>
                 </div>
             </form>

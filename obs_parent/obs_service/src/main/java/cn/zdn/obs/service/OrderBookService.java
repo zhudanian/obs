@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface OrderBookService {
 
-    List<OrderBook> queryByOrderId(Integer orderId);
+    List<OrderBook> queryByOrderId(String orderId);
+
+    void addOrderBooks(List<OrderBook> orderBookList);
 }

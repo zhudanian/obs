@@ -17,4 +17,24 @@ public class ContactServiceImpl implements ContactService {
     public List<Contact> queryAllContact(Integer customerId) {
         return contactDao.selectAll(customerId);
     }
+
+    @Override
+    public Integer addAddress(Contact contact) {
+        return contactDao.insert(contact);
+    }
+
+    @Override
+    public Integer modifyAddress(Contact contact) {
+        return contactDao.update(contact);
+    }
+
+    @Override
+    public Integer removeAddress(Integer contactId) {
+        return contactDao.delete(contactId);
+    }
+
+    @Override
+    public Contact queryAddressById(Integer contactId) {
+        return contactDao.selectByContactId(contactId);
+    }
 }

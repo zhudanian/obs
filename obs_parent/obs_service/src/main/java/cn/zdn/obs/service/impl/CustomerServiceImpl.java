@@ -3,6 +3,7 @@ package cn.zdn.obs.service.impl;
 import cn.zdn.obs.dao.CustomerDao;
 import cn.zdn.obs.dao.CustomerDao;
 import cn.zdn.obs.exceptions.CustomerNotExistException;
+import cn.zdn.obs.model.Contact;
 import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.model.Customer;
 import cn.zdn.obs.params.CustomerParam;

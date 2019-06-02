@@ -24,7 +24,7 @@ public class OrderBookController {
 
     @RequestMapping("/queryByOrderId")
     @ResponseBody
-    public List<OrderBook> queryByOrderId(Integer orderId) {
+    public List<OrderBook> queryByOrderId(String orderId) {
         List<OrderBook> orderBookList = orderBookService.queryByOrderId(orderId);
         return orderBookList;
     }

@@ -91,7 +91,7 @@ public class CustomerController {
             session.setAttribute("customer", customer);
             session.setAttribute("bookCart", bookCart);
 
-            System.out.println( ((BookCart)session.getAttribute("bookCart")).getItems());
+            System.out.println(((BookCart) session.getAttribute("bookCart")).getItems());
 
             return "forward:/front/bookstore/showBookstore";
 
@@ -142,11 +142,61 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping("/beMember")
-    @ResponseBody
-    public ResponseResult beMember() {
+//    @RequestMapping("/beMember")
+//    @ResponseBody
+//    public ResponseResult beMember() {
+//
+//        return ResponseResult.success("恭喜你成功成为会员!");
+//    }
 
-        return ResponseResult.success("恭喜你成功成为会员!");
+    @RequestMapping("/addAddress")
+    @ResponseBody
+    public ResponseResult addAddress(Contact contact, HttpSession httpSession) {
+        Integer customerId = ((Customer) httpSession.getAttribute("customer")).getCustomerId();
+        contact.setCustomer(customerService.queryByCustomerId(customerId));
+        Integer res = contactService.addAddress(contact);
+        if (res == 1) {
+            return ResponseResult.success("添加成功");
+        } else {
+            return ResponseResult.fail("添加失败");
+        }
+
+    }
+
+    @RequestMapping("/queryAddressById")
+    @ResponseBody
+    public ResponseResult queryAddressById(Integer contactId) {
+        System.out.println(contactId);
+        Contact res = contactService.queryAddressById(contactId);
+        System.out.println(res);
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setObj(res);
+        return responseResult;
+    }
+
+    @RequestMapping("/modifyAddress")
+    @ResponseBody
+    public ResponseResult modifyAddress(Contact contact) {
+        System.out.println(contact);
+        Integer res = contactService.modifyAddress(contact);
+        if (res == 1) {
+            return ResponseResult.success("修改成功");
+        } else {
+            return ResponseResult.fail("修改失败");
+        }
+
+    }
+
+    @RequestMapping("/removeAddress")
+    @ResponseBody
+    public ResponseResult removeAddress(Integer contactId) {
+        Integer res = contactService.removeAddress(contactId);
+        if (res == 1) {
+            return ResponseResult.success("删除成功");
+        } else {
+            return ResponseResult.fail("删除成功");
+        }
+
     }
 
 }

@@ -18,18 +18,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
 
     <script>
-    /*   $(function () {
-           alert(1);
-           console.log(${bookCart});
 
-        });*/
 
     function removeFromCartByIds() {
         var bookIds = [];
         $("[name='test']:checked").each(function () {
             bookIds.push($(this).val());
         });
-        console.info(bookIds);
+        // console.info(bookIds);
         if (bookIds.length < 1) {
             alert("请选择要删除的书籍！");
         } else {
@@ -98,22 +94,57 @@
     }
 
     function setContact(tr) {
-        alert($(this).children().children());
+        // alert($(this).children().children());
         $('#contactName').val($(tr).children().eq(0).text());
         $('#contactPhone').val($(tr).children().eq(1).text());
         $('#contactAddress').val($(tr).children().eq(2).text());
     }
 
-
     function generatorOrder() {
+        if ($('#contactName').val() === "" || $('#contactPhone').val() === "" || $('#contactAddress').val() === "") {
+            alert("请填写完整收货人信息!");
+        } else {
+            var item = {};
+            var items = [];
+            var bookIds = [];
+            $("[name='test']:checked").each(function () {
+                bookIds.push($(this).val());
+                item.bookId = $(this).val();
+                item.num = $(this).parent().parent().children().eq(4).children().val();
+                items.push(item);
+            });
 
-        $.post(
-            '${pageContext.request.contextPath}/front/order/generatorOrder',
-            {"contact": $('#contactForm').serialize()},
-            function () {
-
+            if (items.length === 0) {
+                alert("请选择图书!");
+            } else {
+                $.post(
+                    '${pageContext.request.contextPath}/front/order/generateOrder',
+                    {
+                        "contactName": $('#contactName').val(),
+                        "contactPhone": $('#contactPhone').val(),
+                        "contactAddress": $('#contactAddress').val(),
+                        "items": JSON.stringify(items)
+                    },
+                    function () {
+                        $.ajax({
+                                type: "post",
+                                url: "${pageContext.request.contextPath}/front/cart/removeFromCartByIds",
+                                data: {"bookIds": bookIds},
+                                traditional: true,//如果要传数组，这行一定要加！用传统的方式来序列化数据
+                                success: function () {
+                                    $("input[name='test']:checked").each(function () { // 遍历选中的checkbox
+                                        var checkedBook = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+                                        $("#cartTb").find("tr:eq(" + checkedBook + ")").remove();
+                                        alert("购买成功！");
+                                    });
+                                }
+                            }
+                        )
+                    }
+                );
             }
-        )
+        }
+
 
     }
     </script>
@@ -152,19 +183,16 @@
         <c:forEach items="${bookCart.items}" var="item" varStatus="status">
             <tr class="cartTbBooks">
                 <td>
-                    <label>
-                        <input type="checkbox" name="test" value="${item.book.bookId}">
-                    </label>
+                    <input type="checkbox" name="test" value="${item.book.bookId}">
+
                 </td>
                 <td>${status.count}</td>
                 <td>${item.book.bookName}</td>
                 <td><img src="${pageContext.request.contextPath}/front/bookstore/showPic?image=${item.book.bookImage}"
                          alt="" width="60" height="60"></td>
                 <td>
-                    <label>
-                        <input type="text" value="${item.num}" size="5"
-                               onblur="changeNum(${item.book.bookId},this)">
-                    </label>
+                    <input type="text" value="${item.num}" size="5"
+                           onblur="changeNum(${item.book.bookId},this)">
                 </td>
                 <td>${item.book.bookPrice}</td>
                 <td>${item.book.bookPrice*item.num}</td>

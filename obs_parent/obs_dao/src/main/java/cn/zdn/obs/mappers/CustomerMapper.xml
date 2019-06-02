@@ -109,15 +109,13 @@
          customer_password,
          customer_address,
          customer_phone,
-         customer_register_date,
-         vip_end_date)
+         customer_register_date)
         values (null,
                 #{customerName},
                 #{customerPassword},
                 #{customerAddress},
                 #{customerPhone},
-                now(),
-                null)
+                now())
     </insert>
 
     <delete id="delete">

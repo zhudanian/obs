@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/msg.css">
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
-   <%-- <script src="${pageContext.request.contextPath}/js/obs.js"></script>--%>
+    <%-- <script src="${pageContext.request.contextPath}/js/obs.js"></script>--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
     <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
@@ -25,143 +25,241 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css"/>
 
     <script>
-        $(function () {
-            //修改用户表单的客户端校验
-            $('#modifyBaseInfoForm').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
+    $(function () {
+        //修改用户表单的客户端校验
+        $('#modifyBaseInfoForm').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
 
+            },
+            fields: {
+                customerName: {
+                    validators: {
+                        notEmpty: {
+                            message: '登录账号不能为空'
+                        },
+                        remote: {
+                            //ajax后端校验该登录账号是否已经存在
+                            url: '${pageContext.request.contextPath}/front/customer/checkCustomerName'
+                        }
+                    }
                 },
-                fields: {
-                    customerName: {
-                        validators: {
-                            notEmpty: {
-                                message: '登录账号不能为空'
-                            },
-                            remote: {
-                                //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/front/customer/checkCustomerName'
-                            }
+                customerPhone: {
+                    validators: {
+                        notEmpty: {
+                            message: '电话号码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^1\d{10}$/,
+                            message: '手机号格式错误'
                         }
-                    },
-                    customerPhone: {
-                        validators: {
-                            notEmpty: {
-                                message: '电话号码不能为空'
-                            },
-                            regexp: {
-                                regexp: /^1\d{10}$/,
-                                message: '手机号格式错误'
-                            }
-                        }
-                    },
-                    customerAddress: {
-                        validators: {
-                            notEmpty: {
-                                message: '地址不能为空'
-                            }
+                    }
+                },
+                customerAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '地址不能为空'
                         }
                     }
                 }
-
-            });
-
-            //修改用户表单的客户端校验
-            $('#addAddressForm').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-
-                },
-                fields: {
-                    contactName: {
-                        validators: {
-                            notEmpty: {
-                                message: '收货人不能为空'
-                            }
-                        }
-                    },
-                    contactPhone: {
-                        validators: {
-                            notEmpty: {
-                                message: '电话号码不能为空'
-                            },
-                            regexp: {
-                                regexp: /^1\d{10}$/,
-                                message: '手机号格式错误'
-                            }
-                        }
-                    },
-                    contactAddress: {
-                        validators: {
-                            notEmpty: {
-                                message: '地址不能为空'
-                            }
-                        }
-                    }
-                }
-
-            });
-            //服务端校验
-            var errorMsg = '${errorMessage}';
-            if (errorMsg != '') {
-                layer.msg(errorMsg, {
-                    time: 2000,
-                    skin: 'errorMsg'
-                });
             }
+
         });
 
-        function showModifyPasswordModal() {
-            $('#modifyPasswordModal').modal('show');
-        }
+        //修改用户表单的客户端校验
+        $('#addAddressForm').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
 
-        function showModifyCustomerBaseInfo() {
-            $('#modifyCustomerBaseInfo').modal('show');
-        }
-
-        //修改客户信息
-        function modifyBaseInfo() {
-            var bv = $('#modifyBaseInfoForm').data('bootstrapValidator');
-            bv.validate();
-            if (bv.isValid()) {
-                $.post(
-                    '${pageContext.request.contextPath}/front/customer/modifyBaseInfo',
-                    {
-                        'customerName': $('#customerName_m').val(),
-                        'customerPhone': $('#customerPhone_m').val(),
-                        'customerAddress': $('#customerAddress_m').val()
-                    },
-                    function (responseResult) {
-                        // alert(responseResult.status);
-                        if (responseResult.status == 1) {
-
-                            //使用layer.js弹出一个弹出框
-                            layer.msg(
-                                responseResult.message,
-                                {
-                                    time: 2000,//2秒钟后隐藏弹出框
-                                    skin: 'successMsg'//设置弹出框的样式
-                                },
-                                function () {
-                                    alert(1);
-                                }
-                            );
-                        } else {
-                            layer.msg(responseResult.message, {
-                                time: 2000,//2秒钟后隐藏弹出框
-                                skin: 'errorMsg'//设置弹出框的样式
-                            });
+            },
+            fields: {
+                contactName: {
+                    validators: {
+                        notEmpty: {
+                            message: '收货人不能为空'
                         }
-                    });
+                    }
+                },
+                contactPhone: {
+                    validators: {
+                        notEmpty: {
+                            message: '电话号码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^1\d{10}$/,
+                            message: '手机号格式错误'
+                        }
+                    }
+                },
+                contactAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '地址不能为空'
+                        }
+                    }
+                }
             }
 
+        });
+        //服务端校验
+        var errorMsg = '${errorMessage}';
+        if (errorMsg != '') {
+            layer.msg(errorMsg, {
+                time: 2000,
+                skin: 'errorMsg'
+            });
+        }
+    });
+
+    function showModifyPasswordModal() {
+        $('#modifyPasswordModal').modal('show');
+    }
+
+    function showModifyCustomerBaseInfo() {
+        $('#modifyCustomerBaseInfo').modal('show');
+    }
+
+    //修改客户信息
+    function modifyBaseInfo() {
+        var bv = $('#modifyBaseInfoForm').data('bootstrapValidator');
+        bv.validate();
+        if (bv.isValid()) {
+            $.post(
+                '${pageContext.request.contextPath}/front/customer/modifyBaseInfo',
+                {
+                    'customerName': $('#customerName_m').val(),
+                    'customerPhone': $('#customerPhone_m').val(),
+                    'customerAddress': $('#customerAddress_m').val()
+                },
+                function (responseResult) {
+                    // alert(responseResult.status);
+                    if (responseResult.status == 1) {
+
+                        alert("修改成功！");
+                        $('#modifyCustomerBaseInfo').modal('hide');
+                        location.reload(true);
+                        //
+                        // //使用layer.js弹出一个弹出框
+                        // layer.msg(
+                        //     responseResult.message,
+                        //     {
+                        //         time: 2000,//2秒钟后隐藏弹出框
+                        //         skin: 'successMsg'//设置弹出框的样式
+                        //     },
+                        //     function () {
+                        //         location.reload(true);
+                        //     }
+                        // );
+                    } else {
+                        layer.msg(responseResult.message, {
+                            time: 2000,//2秒钟后隐藏弹出框
+                            skin: 'errorMsg'//设置弹出框的样式
+                        });
+                    }
+                });
         }
 
+    }
 
+    function addAddress() {
+        $.post(
+            '${pageContext.request.contextPath}/front/customer/addAddress',
+            $('#addAddressForm').serialize(),
+            function (responseResult) {
+                // alert(responseResult.status);
+                if (responseResult.status == 1) {
+
+                    alert("添加成功！");
+                    $('#addAddressModal').modal('hide');
+                    location.reload(true);
+                    //使用layer.js弹出一个弹出框
+                    // layer.msg(
+                    //     responseResult.message,
+                    //     {
+                    //         time: 2000,//2秒钟后隐藏弹出框
+                    //         skin: 'successMsg'//设置弹出框的样式
+                    //     },
+                    //     function () {
+                    //         $("#addressTable").bootstrapTable('refresh');
+                    //     }
+                    // );
+                } else {
+                    alert("添加失败！");
+                    // layer.msg(responseResult.message, {
+                    //     time: 2000,//2秒钟后隐藏弹出框
+                    //     skin: 'errorMsg'//设置弹出框的样式
+                    // });
+                }
+            });
+    }
+
+    function modifyContactModalShow(val) {
+        $.post(
+            '${pageContext.request.contextPath}/front/customer/queryAddressById',
+            {contactId: val},
+            function (responseResult) {
+                $('#contactId_m').val(responseResult.obj.contactId);
+                $('#contactName_m').val(responseResult.obj.contactName);
+                $('#contactPhone_m').val(responseResult.obj.contactPhone);
+                $('#contactAddress_m').val(responseResult.obj.contactAddress);
+            }
+        );
+        $('#modifyAddressModal').modal('show');
+    }
+
+    function modifyAddress() {
+        $.post(
+            '${pageContext.request.contextPath}/front/customer/modifyAddress',
+            $('#modifyAddressForm').serialize(),
+            function (responseResult) {
+                // alert(responseResult.status);
+                if (responseResult.status == 1) {
+
+                    alert("修改成功！");
+                    $('#modifyAddressModal').modal('hide');
+                    location.reload(true);
+                } else {
+                    alert("修改失败！");
+                }
+            });
+    }
+
+    //显示删除确认模态框
+    function showRemoveAddressModal(val) {
+        //将该值写入到该模态框的隐藏表单域
+        $('#contactId_d').val(val);
+        //显示模态框
+        $('#removeAddressModal').modal('show');
+    }
+
+    function removeAddress() {
+        $.post(
+            '${pageContext.request.contextPath}/front/customer/removeAddress',
+            {contactId: $('#contactId_d').val()},
+            function (result) {
+                if (result.status == 1) {
+                    alert("删除成功！");
+                    $('#removeAddressModal').modal('hide');
+                    location.reload(true);
+                    //     layer.msg(result.message, {
+                    //         time: 2000,
+                    //         skin: 'successMsg'
+                    //     }, function () {
+                    //         alert(1);
+                    //     });
+                } else {
+                    alert("删除失败！");
+                    // layer.msg(result.message, {
+                    //     time: 2000,
+                    //     skin: 'errorMsg'
+                    // });
+                }
+            });
+    }
     </script>
 </head>
 <body>
@@ -178,7 +276,7 @@
                 修改资料
             </li>
             <%--<li style="cursor: pointer;padding: 20px;font-size: large">--%>
-                <%--充值会员--%>
+            <%--充值会员--%>
             <%--</li>--%>
         </ul>
     </div>
@@ -228,7 +326,8 @@
                     </div>
                 </div>
                 <button class="btn btn-primary" data-toggle="modal" data-target="#addAddressModal">新增收获地址</button>
-                <table class="table table-striped table-bordered table-hover" style="margin-top: 10px;text-align: center">
+                <table class="table table-striped table-bordered table-hover"
+                       style="margin-top: 10px;text-align: center" id="addressTable">
                     <thead>
                     <tr>
                         <td> 收货人</td>
@@ -244,8 +343,12 @@
                             <td>${contact.contactPhone}</td>
                             <td>${contact.contactAddress}</td>
                             <td>
-                                <button class="btn btn-primary" onclick="modifyContact()">修改</button>
-                                <button class="btn btn-warning" onclick="deleteContact()">删除</button>
+                                <button class="btn btn-primary" onclick="modifyContactModalShow(${contact.contactId})">
+                                    修改
+                                </button>
+                                <button class="btn btn-warning" onclick="showRemoveAddressModal(${contact.contactId})">
+                                    删除
+                                </button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -371,7 +474,7 @@
                 </button>
                 <h4 class="modal-title">新增收获地址</h4>
             </div>
-            <form action="${pageContext.request.contextPath}/customer/addAddress" class="form-horizontal" method="post" id="addAddressForm">
+            <form class="form-horizontal" id="addAddressForm">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系人：</label>
@@ -397,7 +500,7 @@
                         关&nbsp;&nbsp;闭
                     </button>
                     <button type="reset" class="btn btn-warning">重&nbsp;&nbsp;置</button>
-                    <button type="submit" class="btn btn-warning">添&nbsp;&nbsp;加</button>
+                    <input type="button" class="btn btn-warning" onclick="addAddress()" value="添&nbsp;&nbsp;加"/>
                 </div>
             </form>
         </div>
@@ -406,5 +509,74 @@
 <!-- 新增地址模态框 end-->
 
 <!-- 修改地址模态框 start-->
+<div class="modal fade" id="modifyAddressModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改收获地址</h4>
+            </div>
+            <form class="form-horizontal" id="modifyAddressForm">
+                <input type="hidden" id="contactId_m" name="contactId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系人：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" name="contactName" id="contactName_m">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" name="contactPhone" id="contactPhone_m">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">收货地址：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" name="contactAddress" id="contactAddress_m">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">
+                        关&nbsp;&nbsp;闭
+                    </button>
+                    <button type="reset" class="btn btn-warning">重&nbsp;&nbsp;置</button>
+                    <input type="button" class="btn btn-warning" onclick="modifyAddress()" value="修&nbsp;&nbsp;改"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <!-- 修改地址模态框 end-->
+
+<!-- 确认删除地址 start -->
+<div class="modal fade" tabindex="-1" id="removeAddressModal">
+    <!-- 窗口声明 -->
+    <div class="modal-dialog">
+        <!-- 内容声明 -->
+        <input type="hidden" id="contactId_d">
+        <div class="modal-content">
+            <!-- 头部、主体、脚注 -->
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">提示消息</h4>
+            </div>
+
+            <div class="modal-body text-center row">
+                <div class="col-sm-8">
+                    <h4>确认要删除该商品吗？</h4>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="removeAddress()">确认</button>
+                <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 确认删除地址 end -->
 </html>

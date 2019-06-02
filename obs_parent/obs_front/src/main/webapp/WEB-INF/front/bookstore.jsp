@@ -109,7 +109,7 @@
 
         <iframe id="frame-id" class="col-lg-10"
                 src="${pageContext.request.contextPath}/front/bookstore/queryByHot"
-               height="3000px" frameborder="0" scrolling="no">
+               height="920px" frameborder="0" scrolling="no">
               <%--  width="100%" height="100%" >--%>
         </iframe>
 

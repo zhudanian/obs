@@ -14,4 +14,14 @@ public class Contact implements Serializable {
 
     private Customer customer;
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactId=" + contactId +
+                ", contactName='" + contactName + '\'' +
+                ", contactAddress='" + contactAddress + '\'' +
+                ", contactPhone='" + contactPhone + '\'' +
+                ", customer=" + customer +
+                '}';
+    }
 }

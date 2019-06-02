@@ -1,6 +1,7 @@
 package cn.zdn.obs.service;
 
 import cn.zdn.obs.model.Order;
+import cn.zdn.obs.model.Orders;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -20,5 +21,7 @@ public interface OrderService {
     //前台
     List<Order> queryByCustomerId(Integer customerId) throws Exception;
 
-    void changeOrderState(Integer orderId);
+    void changeOrderState(String orderId);
+
+    void generateOrder(Orders orders);
 }

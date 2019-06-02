@@ -11,14 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class OrderBookServiceImpl implements OrderBookService {
     @Autowired
     private OrderBookDao orderBookDao;
 
     @Override
-    public List<OrderBook> queryByOrderId(Integer orderId) {
+    public List<OrderBook> queryByOrderId(String orderId) {
         return orderBookDao.selectByOrderId(orderId);
+    }
+
+    @Override
+    public void addOrderBooks(List<OrderBook> orderBookList) {
+        for (OrderBook orderBook : orderBookList) {
+            orderBookDao.insert(orderBook);
+        }
     }
 
   /*  @Override

@@ -84,17 +84,17 @@
     </script>
 </head>
 <body>
-<div style="height: 100%;width: 100%">
-    <div class="row">
+<div class="col-sm-12">
+    <div class="row" style="margin-left: 10px">
         <h1>热销书籍</h1>
         <hr/>
     </div>
 
     <div id="iframeBook">
-
-        <c:forEach items="${bookList.list}" var="hotBook">
-            <div class="card-group">
-                <div class="card col-lg-2">
+        <div class="row" style="display: inline">
+            <c:forEach items="${bookList.list}" var="hotBook">
+                <div class="card-deck" style="display: inline-block">
+                    <div class="card col-sm-2">
                     <input type="hidden" class="hbi" value="${hotBook.bookId}">
                     <img
                             src="${pageContext.request.contextPath}/front/bookstore/showPic?image=${hotBook.bookImage}"
@@ -111,7 +111,7 @@
             </div>
         </c:forEach>
     </div>
-    <div class="row">
+    <div class="row" style="text-align: center">
         <ul id="pagination"/>
     </div>
 
@@ -131,24 +131,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <img id="bookImage_qid" style="width: 200px;height: 300px;margin-left: 30px"/>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="modal-pro-content">
                                 <input type="hidden" id="bookId_qid" name="bookId">
-                                <span class="col-md-12">
+                                <span class="col-sm-12">
                                      <h3>《<label id="bookName_qid" name="bookName"></label>》</h3>
                                 </span>
-                                <span class="col-md-12" style="font-size: large;color: #f8bf0f">
+                                <span class="col-sm-12" style="font-size: large;color: #f8bf0f">
                                      <h4>￥<label id="bookPrice_qid" name="bookPrice_qid"></label></h4>
                                 </span>
-                                <p class="col-md-12" id="bookDescription_qid" style="height:150px"></p>
+                                <p class="col-sm-12" id="bookDescription_qid" style="height:150px"></p>
                                 <div class="row">
-                                    <span class="col-md-6" style="float: left">
+                                    <span class="col-sm-6" style="float: left">
                                          <input type="number" value="1" name="num" id="num" style="width: 50px"/>
                                     </span>
-                                    <span class="col-md-6">
+                                    <span class="col-sm-6">
                                           <button onclick="addToCart($('#bookId_qid').val())">加入购物车</button>
                                     </span>
 

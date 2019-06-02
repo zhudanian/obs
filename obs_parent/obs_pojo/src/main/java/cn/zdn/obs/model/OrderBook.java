@@ -10,6 +10,7 @@ public class OrderBook implements Serializable {
 
     private Integer id;
     private Integer num;
+    private String orderId;
     private Book book;
 
     public OrderBook() {

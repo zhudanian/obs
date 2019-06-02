@@ -15,6 +15,35 @@
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/obs.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
+    <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
+
+    <script>
+    $(function () {
+        $('#pagination').bootstrapPaginator({
+            bootstrapMajorVersion: 3,
+            currentPage:${orderList.pageNum},
+            totalPages:${orderList.pages},
+            pageUrl: function (type, page, current) {
+                return '${pageContext.request.contextPath}/front/order/queryMyOrder?pageNum=' + page;
+            },
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case 'first':
+                        return '首页';
+                    case 'prev':
+                        return '上一页';
+                    case 'next':
+                        return '下一页';
+                    case 'last':
+                        return '尾页';
+                    case 'page':
+                        return page;
+                }
+            }
+        });
+    });
+    </script>
 </head>
 <body>
 
@@ -77,6 +106,9 @@
 
 
         </table>
+    </div>
+    <div style="text-align: center">
+        <ul id="pagination"></ul>
     </div>
     <!-- content end-->
 </div>

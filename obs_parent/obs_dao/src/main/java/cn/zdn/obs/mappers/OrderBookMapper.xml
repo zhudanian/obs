@@ -64,5 +64,15 @@
         where id = #{id}
     </delete>
 
+    <insert id="insert" parameterType="OrderBook">
+        insert into
+        order_book
+        values (
+                null,
+                #{num},
+                #{orderId},
+                #{book.bookId}
+               )
+    </insert>
 
 </mapper>

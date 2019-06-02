@@ -1,6 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<script>
+$('#nav').find('li').click(function () {
+    // 为当前点击的导航加上高亮，其余的移除高亮
+    $(this).addClass('active').siblings('li').removeClass('active');
+});
+</script>
 <!-- 头部公共模块 start -->
 <header class="container-fluid">
     <!-- header-top-area-start -->
@@ -33,11 +38,11 @@
         </div>
         <div class="col-lg-2 col-lg-offset-3">
             <%--<div class="search-form">--%>
-                <%--<form id="queryByInputForm"--%>
-                      <%--action="${pageContext.request.contextPath}/front/bookstore/queryByInput" method="post">--%>
-                    <%--<input type="text" placeholder="请输入的书名或书籍类型"/>--%>
-                    <%--<a id="queryByInput"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>--%>
-                <%--</form>--%>
+            <%--<form id="queryByInputForm"--%>
+            <%--action="${pageContext.request.contextPath}/front/bookstore/queryByInput" method="post">--%>
+            <%--<input type="text" placeholder="请输入的书名或书籍类型"/>--%>
+            <%--<a id="queryByInput"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>--%>
+            <%--</form>--%>
             <%--</div>--%>
         </div>
 
@@ -49,13 +54,16 @@
     <nav class="navbar navbar-default header-navbar">
         <div class="container">
             <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li role="presentation" ><a
-                            href="${pageContext.request.contextPath}/front/bookstore/showBookstore">商城主页</a></li>
-                    <li role="presentation" class="active"><a
-                            href="${pageContext.request.contextPath}/front/cart/queryMyCart">我的购物车</a></li>
+                <ul class="nav navbar-nav" id="nav">
                     <li role="presentation"><a
-                            href="${pageContext.request.contextPath}/front/order/queryMyOrder">我的订单</a></li>
+                            href="${pageContext.request.contextPath}/front/bookstore/showBookstore">
+                        商城主页</a></li>
+                    <li role="presentation"><a
+                            href="${pageContext.request.contextPath}/front/cart/queryMyCart">
+                        我的购物车</a></li>
+                    <li role="presentation"><a
+                            href="${pageContext.request.contextPath}/front/order/queryMyOrder">
+                        我的订单</a></li>
                 </ul>
 
             </div>

@@ -5,6 +5,7 @@ import cn.zdn.obs.dao.OrderDao;
 import cn.zdn.obs.model.Book;
 import cn.zdn.obs.model.Order;
 import cn.zdn.obs.model.OrderBook;
+import cn.zdn.obs.model.Orders;
 import cn.zdn.obs.service.OrderService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.handlers.MapListHandler;
@@ -28,14 +29,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> queryAll() {
-        System.out.println(orderDao.selectAll());
+       // System.out.println(orderDao.selectAll());
         return orderDao.selectAll();
     }
 
     @Override
-    public void changeOrderState(Integer orderId) {
+    public void changeOrderState(String orderId) {
         orderDao.updateOrderState(orderId);
 
+    }
+
+    @Override
+    public void generateOrder(Orders orders) {
+        orderDao.insert(orders);
     }
 
 

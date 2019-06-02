@@ -38,7 +38,7 @@ public class OrderController {
 
     @RequestMapping("/changeOrderState")
     @ResponseBody
-    public void changeOrderState(Integer orderId){
+    public void changeOrderState(String orderId){
         orderService.changeOrderState(orderId);
     }
 

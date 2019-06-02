@@ -121,7 +121,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">确认登录密码:</label>
                         <div class="col-sm-5">
-                            <input class="form-control" type="rePassword" name="rePassword">
+                            <input class="form-control" type="password" name="rePassword">
                         </div>
                     </div>
 

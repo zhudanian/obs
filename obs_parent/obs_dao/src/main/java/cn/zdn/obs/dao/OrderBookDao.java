@@ -11,7 +11,7 @@ public interface OrderBookDao{
 
    // OrderBook select(Integer orderBookId);
 
-    List<OrderBook> selectByOrderId(Integer orderBookId);
+    List<OrderBook> selectByOrderId(String orderBookId);
 
     List<Map<String, OrderBook>> selectByOrderId1(Integer orderBookId);
     //Integer insert(OrderBook orderBook);
@@ -20,4 +20,5 @@ public interface OrderBookDao{
 
     Integer delete(Integer orderBookId);
 
+    void insert(OrderBook orderBook);
 }

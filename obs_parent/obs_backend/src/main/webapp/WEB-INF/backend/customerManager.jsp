@@ -22,6 +22,30 @@
     <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
 
     <script>
+    $(function () {
+        $('#pagination').bootstrapPaginator({
+            bootstrapMajorVersion: 3,
+            currentPage:${customer.pageNum},
+            totalPages:${customer.pages},
+            pageUrl: function (type, page, current) {
+                return '${pageContext.request.contextPath}/backend/customerManager/queryAll?pageNum=' + page;
+            },
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case 'first':
+                        return '首页';
+                    case 'prev':
+                        return '上一页';
+                    case 'next':
+                        return '下一页';
+                    case 'last':
+                        return '尾页';
+                    case 'page':
+                        return page;
+                }
+            }
+        });
+    });
 
     //显示客户详情模态框
     function showCustomerModal(customerId) {
@@ -112,6 +136,9 @@
 
                 </tbody>
             </table>
+        </div>
+        <div style="text-align: center">
+            <ul id="pagination"></ul>
         </div>
     </div>
 </div>

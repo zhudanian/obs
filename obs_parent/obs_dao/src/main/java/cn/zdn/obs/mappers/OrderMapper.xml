@@ -16,7 +16,7 @@
 
 
     <resultMap id="orderResultMap" type="Order">
-        <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <id column="order_id" property="orderId" jdbcType="VARCHAR"/>
         <result column="confirm_date" property="confirmDate" jdbcType="TIMESTAMP"/>
         <result column="order_state" property="orderState" jdbcType="INTEGER"/>
         <result column="total_price" property="totalPrice" jdbcType="DECIMAL"/>
@@ -38,12 +38,13 @@
         order_book.num num,
         book.book_id bookId,
         book.book_name bookName,
+        book.book_author bookAuthor,
         book.book_image bookImage,
         book.book_price bookPrice
     </sql>
 
     <resultMap id="orderResultMap1" type="Order">
-        <id column="orderId" property="orderId" jdbcType="INTEGER"/>
+        <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
         <result column="confirmDate" property="confirmDate" jdbcType="TIMESTAMP"/>
         <result column="orderState" property="orderState" jdbcType="INTEGER"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DECIMAL"/>
@@ -59,6 +60,7 @@
                 <result column="bookId" property="bookId"/>
                 <result column="bookName" property="bookName"/>
                 <result column="bookImage" property="bookImage"/>
+                <result column="bookAuthor" property="bookAuthor"/>
                 <result column="bookPrice" property="bookPrice"/>
             </association>
         </collection>
@@ -106,22 +108,22 @@
             contact_phone=#{contactPhone,jdbcType=VARCHAR},
             contact_address=#{contactAddress,jdbcType=VARCHAR},
             comment_id=#{commentId,jdbcType=INTEGER}
-        where order_id = #{orderId,jdbcType=INTEGER}
+        where order_id = #{orderId}
     </update>
 
-    <insert id="insert" parameterType="Order">
+    <insert id="insert" parameterType="Orders">
         insert into orders (order_id, confirm_date, order_state,
                             total_price, customer_id, contact_name,
                             contact_phone, contact_address, comment_id)
-        values (#{orderId,jdbcType=INTEGER},
-                #{confirmDate,jdbcType=TIMESTAMP},
-                #{orderState,jdbcType=INTEGER},
+        values (#{orderId},
+                now(),
+                1,
                 #{totalPrice,jdbcType=DECIMAL},
                 #{customerId,jdbcType=INTEGER},
                 #{contactName,jdbcType=VARCHAR},
                 #{contactPhone,jdbcType=VARCHAR},
                 #{contactAddress,jdbcType=VARCHAR},
-                #{commentId,jdbcType=INTEGER})
+                null)
     </insert>
 
     <delete id="delete">
@@ -129,7 +131,6 @@
         from orders
         where order_id = #{orderId}
     </delete>
-
 
 
 </mapper>

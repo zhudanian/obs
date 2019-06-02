@@ -27,7 +27,7 @@
         customer_id=#{customerId}
     </select>
 
-    <select id="selectByContactId" resultType="Contact">
+    <select id="selectByContactId" resultMap="contactResultMap">
         select
         <include refid="contactColumn"/>
         from
@@ -46,8 +46,8 @@
     </update>
 
     <insert id="insert" parameterType="Contact">
-        insert into contact (contact_id, contact_name, contact_address,contact_phone)
-        values (null, #{contactName}, #{contactAddress},#{contactPhone});
+        insert into contact ( contact_name, contact_address,contact_phone,customer_id)
+        values (#{contactName}, #{contactAddress},#{contactPhone},#{customer.customerId});
     </insert>
 
     <delete id="delete">
