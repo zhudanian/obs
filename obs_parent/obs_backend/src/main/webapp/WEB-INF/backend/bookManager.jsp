@@ -94,7 +94,7 @@
                 bookTypeId: {
                     validators: {
                         notEmpty: {
-                            message: '请选择商品类型'
+                            message: '请选择图书类型'
                         }
 
                     }
@@ -117,7 +117,7 @@
                 name: {
                     validators: {
                         notEmpty: {
-                            message: '商品名称不能为空'
+                            message: '图书名称不能为空'
                         },
                         remote: {
                             //校验该名称是否已经在数据库中存在
@@ -141,7 +141,7 @@
                 bookTypeId: {
                     validators: {
                         notEmpty: {
-                            message: '请选择商品类型'
+                            message: '请选择图书类型'
                         }
 
                     }
@@ -313,7 +313,7 @@
                 <thead>
                 <tr class="text-danger">
                     <th class="text-center">编号</th>
-                    <th class="text-center">商品</th>
+                    <th class="text-center">图书</th>
                     <th class="text-center">价格</th>
                     <th class="text-center">产品类型</th>
                     <th class="text-center">状态</th>
@@ -329,8 +329,8 @@
                         <td>${book.bookPrice}</td>
                         <td>${book.bookType.bookTypeName}</td>
                         <td>
-                            <c:if test="${book.bookType.bookTypeState==1}">有效商品</c:if>
-                            <c:if test="${book.bookType.bookTypeState==0}">无效商品</c:if>
+                            <c:if test="${book.bookType.bookTypeState==1}">有效图书</c:if>
+                            <c:if test="${book.bookType.bookTypeState==0}">无效图书</c:if>
                         </td>
                         <td class="text-center">
                             <input type="button" class="btn btn-primary btn-sm" value="修改"
@@ -348,7 +348,7 @@
     </div>
 </div>
 
-<!-- 添加商品 start -->
+<!-- 添加图书 start -->
 <div class="modal fade" tabindex="-1" id="addBookModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
@@ -430,9 +430,9 @@
         </form>
     </div>
 </div>
-<!-- 添加商品 end -->
+<!-- 添加图书 end -->
 
-<!-- 修改商品 start -->
+<!-- 修改图书 start -->
 <div class="modal fade" tabindex="-1" id="modifyBookModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
@@ -444,7 +444,7 @@
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">修改商品</h4>
+                    <h4 class="modal-title">修改图书</h4>
                 </div>
                 <div class="modal-body text-center row">
                     <div class="modal-body text-center row">
@@ -521,10 +521,10 @@
             </div>
         </form>
     </div>
-    <!-- 修改商品 end -->
+    <!-- 修改图书 end -->
 </div>
 
-<!-- 确认删除商品 start -->
+<!-- 确认删除图书 start -->
 <div class="modal fade" tabindex="-1" id="removeBookModal">
     <!-- 窗口声明 -->
     <div class="modal-dialog">
@@ -539,7 +539,7 @@
 
             <div class="modal-body text-center row">
                 <div class="col-sm-8">
-                    <h4>确认要删除该商品吗？</h4>
+                    <h4>确认要删除该图书吗？</h4>
                 </div>
             </div>
 
@@ -550,7 +550,7 @@
         </div>
     </div>
 </div>
-<!-- 确认删除商品 end -->
+<!-- 确认删除图书 end -->
 </body>
 
 </html>

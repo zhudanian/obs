@@ -90,8 +90,13 @@ public class OrderController {
         orders.setTotalPrice(totalPrice);
         orderService.generateOrder(orders);
         orderBookService.addOrderBooks(orderBookList);
+        return "myOrders";
 
-       // removeFromCartByIds();
+    }
+
+
+}
+// removeFromCartByIds();
 // System.out.println(orders);
 //        Book book = bookService.queryByBookId(items.getBookId());
 
@@ -114,10 +119,4 @@ public class OrderController {
 //        order.setTotalPrice(bookCart.getTotalMoney());
 //        order.setCustomer(customer);
 //        order.setOrderBookList(orderBookList);
-        //Cart cart = new Cart();
-        return "myOrders";
-
-    }
-
-
-}
+//Cart cart = new Cart();
