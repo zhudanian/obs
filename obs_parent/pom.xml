@@ -221,7 +221,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.47</version>
+                <version>1.2.83</version>
             </dependency>
 
             <!--bean的工具集,是一个第三方库-->
